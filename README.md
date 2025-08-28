@@ -3,5 +3,5 @@ _desktop application to manage ship arrival and departure schedules at the port,
 
 ### Kelompok JS Enjoyer <br> 
 Ketua Kelompok: Fahmi Irfan Faiz - 23/520563/TK/57396 <br>
-Anggota 1: <br>
+Anggota 1: Haidar Faruqi Al Ghifari - 23/518252/TK/57023<br>
 Anggota 2: <br>
