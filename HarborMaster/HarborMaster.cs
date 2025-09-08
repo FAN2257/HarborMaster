@@ -13,5 +13,19 @@ namespace HarborMaster
         public string Contact { get; set; }
         public string Role { get; set; }
 
+        public void CreateAssignment(Berth berth, Ship ship)
+        {
+            berth.AssignShip(ship);
+        }
+
+        public void MonitorTraffic()
+        {
+            //Logic Assignment
+        }
+
+        public void GenerateReport()
+        {
+            //Logic Assignment
+        }
     }
 }

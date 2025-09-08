@@ -16,5 +16,21 @@ namespace HarborMaster
         public DateTime DepartureTime { get; set; }
         public string Status { get; set; }
 
+        public void Arrive()
+        {
+            Status = "Arrived";
+            ArrivalTime = DateTime.Now;
+        }
+
+        public void Depart()
+        {
+            Status = "Departed";
+            DepartureTime = DateTime.Now;
+        }
+
+        public void UpdateStatus(string newStatus)
+        {
+            Status = newStatus;
+        }
     }
 }

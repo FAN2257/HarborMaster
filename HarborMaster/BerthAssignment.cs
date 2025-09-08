@@ -18,6 +18,25 @@ namespace HarborMaster
         public Berth Berth { get; set; }
         public Schedule Schedule { get; set; }
         public HarborMaster HarborMaster { get; set; }
-        public List<PortService> PortService { get; set; }
+        public List<PortService> PortService { get; set; } = new List<PortService>();
+
+        public void Schedule(Ship ship, Berth berth, DateTime arrival, DateTime departure)
+        {
+            Ship = ship;
+            Berth = berth;
+            ArrivalTime = arrival;
+            DepartureTime = departure;
+            Status = "Scheduled";
+        }
+
+        public void CompleteAssignment()
+        {
+            Status = "Completed";
+            Berth.ReleaseShip(Ship);
+        }
+        public GetAssignmentInfo()
+        {
+            return $"AssignmentID: {AssignmentID}, Ship: {Ship.Name}, Berth: {Berth.BerthID}, Arrival: {ArrivalTime}, Departure: {DepartureTime}, Status: {Status}";
+        }
     }
 }
