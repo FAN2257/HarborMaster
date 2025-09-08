@@ -5,3 +5,15 @@ _desktop application to manage ship arrival and departure schedules at the port,
 Ketua Kelompok: Fahmi Irfan Faiz - 23/520563/TK/57396 <br>
 Anggota 1: Haidar Faruqi Al Ghifari - 23/518252/TK/57023<br>
 Anggota 2: Fadel Aulia Naldi - 23/519144/TK/57236 <br>
+
+## Class
+### Diagram
+![Class Diagram](ClassDiagramJunpro.png "Class Diagram")
+
+### Table
+1. Harbor
+| Left |  Center  | Right |
+|:-----|:--------:|------:|
+| L0   | **bold** | $1600 |
+| L1   |  `code`  |   $12 |
+| L2   | _italic_ |    $1 |
