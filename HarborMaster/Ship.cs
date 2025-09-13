@@ -12,9 +12,9 @@ namespace HarborMaster
         public string Name { get; set; }
         public string Type { get; set; }
         public string Flag { get; set; }
-        public DateTime ArrivalTime { get; set; }
-        public DateTime DepartureTime { get; set; }
-        public string Status { get; set; }
+        public DateTime? ArrivalTime { get; private set; }
+        public DateTime? DepartureTime { get; private set; }
+        public string Status { get; private set; } // Arrived, Departed, Waiting
 
         public void Arrive()
         {

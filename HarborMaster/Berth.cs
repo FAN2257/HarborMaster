@@ -10,8 +10,8 @@ namespace HarborMaster
     {
         public string BerthID { get; set; }
         public string Location { get; set; }
-        public string Capacity { get; set; }
-        public string Status { get; set; }
+        public int Capacity { get; set; }
+        public string Status { get; private set; } = "Available";
 
         public bool CheckAvailability()
         {
@@ -20,28 +20,24 @@ namespace HarborMaster
 
         public void AssignShip(Ship ship)
         {
-            if (CheckAvailability())
-            {
-                Status = "Occupied";
-                ship.Arrive();
-            }
-            else
+            if (!CheckAvailability())
             {
                 throw new InvalidOperationException("Berth is not available.");
             }
+
+            Status = "Occupied";
+            ship.Arrive();
         }
 
         public void ReleaseShip(Ship ship)
         {
-            if (Status == "Occupied")
-            {
-                Status = "Available";
-                ship.Depart();
-            }
-            else
+            if (Status != "Occupied")
             {
                 throw new InvalidOperationException("Berth is already available.");
             }
+
+            Status = "Available";
+            ship.Depart();
         }
     }
 }
