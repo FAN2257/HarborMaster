@@ -6,7 +6,7 @@ Ketua Kelompok: Fahmi Irfan Faiz - 23/520563/TK/57396 <br>
 Anggota 1: Haidar Faruqi Al Ghifari - 23/518252/TK/57023<br>
 Anggota 2: Fadel Aulia Naldi - 23/519144/TK/57236 <br>
 
-## Class Diagram
+### Class Diagram
 ![Class Diagram](ClassDiagramJunpro.png "Class Diagram")
 
 
