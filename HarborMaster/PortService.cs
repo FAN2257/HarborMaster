@@ -13,5 +13,20 @@ namespace HarborMaster
         public decimal Cost { get; set; }
         public string Status { get; set; }
 
+        public void RequestService(Ship ship)
+        {
+            Status = "Requested";
+            Console.WriteLine($"Service {Type} requested for {ship.Name}");
+        }
+
+        public void CompleteService()
+        {
+            Status = "Completed";
+        }
+
+        public decimal CalculateCost()
+        {
+            return Cost;
+        }
     }
 }

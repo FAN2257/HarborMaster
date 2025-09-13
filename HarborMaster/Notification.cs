@@ -8,22 +8,22 @@ namespace HarborMaster
 {
     internal class Notification
     {
-        public int notificationID { get; set; }
-        public string message { get; set; }
-        public string type { get; set; }
-        public DateTime timestamp { get; set; }
+        public string NotificationID { get; set; }
+        public string Message { get; set; }
+        public string Type { get; set; } // Arrival, Assignment, Invoice
+        public string Status { get; private set; } // Unread, Read
+        public DateTime Timestamp { get; private set; }
 
-        public void SendNotification(string message, string type)
+        public void SendNotification(string target)
         {
-            this.message = message;
-            this.type = type;
-            this.timestamp = DateTime.Now;
-            // Logic to send notification (e.g., email, SMS, in-app)
+            Timestamp = DateTime.Now;
+            Status = "Unread";
+            Console.WriteLine($"Notification sent to {target}: {Message}");
         }
 
-        public void markAsRead()
+        public void MarkAsRead()
         {
-            // Logic to mark notification as read
+            Status = "Read";
         }
     }
 }

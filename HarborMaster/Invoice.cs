@@ -8,37 +8,43 @@ namespace HarborMaster
 {
     internal class Invoice
     {
-        public int invoiceID { get; set; }
-        public string shipID { get; set; }
-        public decimal totalAmount { get; set; }
-        public string paymentStatus { get; set; }
-        public DateTime issuedDate { get; set; }
+        public string InvoiceID { get; set; }
+        public string ShipID { get; set; }
+        public decimal TotalAmount { get; private set; }
+        public string PaymentStatus { get; private set; } // Unpaid, Paid
+        public DateTime IssuedDate { get; private set; }
 
-        public void generateInvoice(string shipID, decimal amount)
+        private List<PortService> _services = new List<PortService>();
+
+        public static Invoice GenerateInvoice(Ship ship)
         {
-            this.shipID = shipID;
-            this.totalAmount = amount;
-            this.paymentStatus = "Unpaid";
-            this.issuedDate = DateTime.Now;
-            // Logic to save invoice to database or send to accounting system
+            return new Invoice
+            {
+                InvoiceID = Guid.NewGuid().ToString(),
+                ShipID = ship.ShipID,
+                IssuedDate = DateTime.Now,
+                PaymentStatus = "Unpaid"
+            };
         }
 
-        public PortService[] addService(PortService[] services)
+        public void AddService(PortService service)
         {
-            // Logic to add services to the invoice
-            return services;
+            _services.Add(service);
         }
 
-        public decimal calculateTotal()
+        public decimal CalculateTotal()
         {
-            return totalAmount;
+            TotalAmount = 0;
+            foreach (var s in _services)
+            {
+                TotalAmount += s.CalculateCost();
+            }
+            return TotalAmount;
         }
 
-        public void markAsPaid()
+        public void MarkAsPaid()
         {
-            this.paymentStatus = "Paid";
-            // Logic to update invoice status in database
+            PaymentStatus = "Paid";
         }
-
     }
 }

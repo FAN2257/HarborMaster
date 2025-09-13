@@ -9,34 +9,44 @@ namespace HarborMaster
     public class BerthAssignment
     {
         public string AssignmentID { get; set; }
-        public DateTime AssignmentDate { get; set; }
-        public DateTime ArrivalTime { get; set; }
-        public DateTime DepartureTime { get; set; }
-        public string Status { get; set; }
+        public DateTime ArrivalTime { get; private set; }
+        public DateTime DepartureTime { get; private set; }
+        public string Status { get; private set; } // Scheduled, Completed
 
-        public Ship Ship { get; set; }
-        public Berth Berth { get; set; }
-        public Schedule Schedule { get; set; }
-        public HarborMaster HarborMaster { get; set; }
-        public List<PortService> PortService { get; set; } = new List<PortService>();
+        public Ship AssignedShip { get; private set; }
+        public Berth AssignedBerth { get; private set; }
 
-        public void Schedule(Ship ship, Berth berth, DateTime arrival, DateTime departure)
+        public void Schedule(Ship ship, Berth berth)
         {
-            Ship = ship;
-            Berth = berth;
-            ArrivalTime = arrival;
-            DepartureTime = departure;
+            if (!berth.CheckAvailability())
+            {
+                throw new InvalidOperationException("Berth is not available for scheduling.");
+            }
+
+            AssignedShip = ship;
+            AssignedBerth = berth;
             Status = "Scheduled";
+
+            // langsung assign ke berth
+            berth.AssignShip(ship);
+            ArrivalTime = DateTime.Now;
         }
 
         public void CompleteAssignment()
         {
+            if (Status != "Scheduled")
+            {
+                throw new InvalidOperationException("Assignment cannot be completed in current state.");
+            }
+
             Status = "Completed";
-            Berth.ReleaseShip(Ship);
+            AssignedBerth.ReleaseShip(AssignedShip);
+            DepartureTime = DateTime.Now;
         }
-        public GetAssignmentInfo()
+
+        public string GetAssignmentInfo()
         {
-            return $"AssignmentID: {AssignmentID}, Ship: {Ship.Name}, Berth: {Berth.BerthID}, Arrival: {ArrivalTime}, Departure: {DepartureTime}, Status: {Status}";
+            return $"Assignment {AssignmentID}: Ship {AssignedShip.Name} at berth {AssignedBerth.BerthID} [{Status}]";
         }
     }
 }

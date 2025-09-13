@@ -11,21 +11,35 @@ namespace HarborMaster
         public string HarborMasterID { get; set; }
         public string Name { get; set; }
         public string Contact { get; set; }
-        public string Role { get; set; }
+        public string Role { get; set; } // Admin, Controller
 
-        public void CreateAssignment(Berth berth, Ship ship)
+        public BerthAssignment CreateAssignment(Ship ship, Berth berth, DateTime arrival, DateTime departure)
         {
-            berth.AssignShip(ship);
+            var assignment = new BerthAssignment
+            {
+                AssignmentID = Guid.NewGuid().ToString()
+            };
+
+            assignment.Schedule(ship, berth);
+            return assignment;
         }
 
-        public void MonitorTraffic()
+        public void MonitorTraffic(List<Ship> ships)
         {
-            //Logic Assignment
+            foreach (var s in ships)
+            {
+                Console.WriteLine($"{s.Name} is currently {s.Status}");
+            }
         }
 
-        public void GenerateReport()
+        public string GenerateReport(List<BerthAssignment> assignments)
         {
-            //Logic Assignment
+            string report = "=== Harbor Traffic Report ===\n";
+            foreach (var a in assignments)
+            {
+                report += a.GetAssignmentInfo() + "\n";
+            }
+            return report;
         }
     }
 }
