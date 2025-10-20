@@ -16,8 +16,10 @@ namespace HarborMaster
 
         public Ship Ship { get; set; }
         public Berth Berth { get; set; }
-        public Schedule Schedule { get; set; }
-        public HarborMaster HarborMaster { get; set; }
+        public DateTime ETA { get; set; }
+        public DateTime ETD { get; set; }
+        public string status { get; set; }
+        public HarborUser HarborUser { get; set; }
         public List<PortService> PortService { get; set; } = new List<PortService>();
 
         public void Schedule(Ship ship, Berth berth, DateTime arrival, DateTime departure)
@@ -31,12 +33,26 @@ namespace HarborMaster
 
         public void CompleteAssignment()
         {
+            // Cek apakah BerthAssignment ini memiliki properti Ship dan Berth
+            if (this.Ship == null || this.Berth == null)
+            {
+                throw new InvalidOperationException("Assignment tidak lengkap. Tidak ada kapal atau dermaga yang ditugaskan.");
+            }
+
+            // 1. Perbarui Status Tugas ini
             Status = "Completed";
-            Berth.ReleaseShip(Ship);
+
+            // 2. MINTA SERVICE UNTUK MELEPAS DERMAGA DAN KAPAL
+            // Kita harus membuat instance PortService di sini atau melewatkannya sebagai parameter.
+
+            PortService service = new PortService(); // PANGGIL SERVICE LAYER
+
+            // Panggil fungsi pelepasan di PortService
+            service.ReleaseBerth(this.Berth, this.Ship);
         }
-        public GetAssignmentInfo()
+        public string GetAssignmentInfo()
         {
-            return $"AssignmentID: {AssignmentID}, Ship: {Ship.Name}, Berth: {Berth.BerthID}, Arrival: {ArrivalTime}, Departure: {DepartureTime}, Status: {Status}";
+            return $"AssignmentID: {AssignmentID}, Ship: {Ship?.Name ?? "N/A"}, Berth: {Berth?.Id ?? "N/A"}, Arrival: {ArrivalTime}, Departure: {DepartureTime}, Status: {Status}";
         }
     }
 }
