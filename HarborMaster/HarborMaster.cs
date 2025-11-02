@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace HarborMaster
 {
-    public class HarborMaster
+    public class HarborMasterController
     {
         public string HarborMasterID { get; set; }
         public string Name { get; set; }
