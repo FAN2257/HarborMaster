@@ -3,10 +3,38 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:HarborMaster"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
+        Title="HarborMaster - Monitor Jadwal Pelabuhan" Height="650" Width="1200">
 
-    </Grid>
+    <DockPanel>
+
+        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="15">
+            <Label Content="DASHBOARD OPERASIONAL" FontWeight="Bold" FontSize="20" Foreground="#007ACC"/>
+            <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" Margin="10,0"/>
+
+            <Button Name="BtnNewShip" Content="Input Kapal Baru" Click="OpenArrivalWindow_Click" Padding="15,5" Margin="0,0,10,0"/>
+
+            <Button Name="BtnRefresh" Content="Refresh Jadwal" Click="RefreshSchedule_Click" Padding="15,5"/>
+        </StackPanel>
+
+        <Label DockPanel.Dock="Top" Content="JADWAL ALOKASI DERMAGA AKTIF" FontWeight="SemiBold" FontSize="16" Margin="15,0,15,5"/>
+
+        <DataGrid Name="DgvSchedule" 
+                  AutoGenerateColumns="False" 
+                  IsReadOnly="True" 
+                  Margin="15" 
+                  DockPanel.Dock="Bottom">
+
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="ID Tugas" Binding="{Binding Id}" Width="Auto"/>
+                <DataGridTextColumn Header="Nama Dermaga" Binding="{Binding Berth.Id}" Width="1.2*"/>
+                <DataGridTextColumn Header="Nama Kapal" Binding="{Binding Ship.Name}" Width="2*"/>
+                <DataGridTextColumn Header="Draft Kapal (m)" Binding="{Binding Ship.Draft}" Width="1.5*"/>
+                <DataGridTextColumn Header="ETA" Binding="{Binding ETA, StringFormat='dd/MM/yyyy HH:mm'}" Width="2*"/>
+                <DataGridTextColumn Header="ETD" Binding="{Binding ETD, StringFormat='dd/MM/yyyy HH:mm'}" Width="2*"/>
+                <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="1.5*"/>
+            </DataGrid.Columns>
+
+        </DataGrid>
+    </DockPanel>
 </Window>

@@ -9,44 +9,50 @@ namespace HarborMaster
     public class BerthAssignment
     {
         public string AssignmentID { get; set; }
-        public DateTime ArrivalTime { get; private set; }
-        public DateTime DepartureTime { get; private set; }
-        public string Status { get; private set; } // Scheduled, Completed
+        public DateTime AssignmentDate { get; set; }
+        public DateTime ArrivalTime { get; set; }
+        public DateTime DepartureTime { get; set; }
+        public string Status { get; set; }
 
-        public Ship AssignedShip { get; private set; }
-        public Berth AssignedBerth { get; private set; }
+        public Ship Ship { get; set; }
+        public Berth Berth { get; set; }
+        public DateTime ETA { get; set; }
+        public DateTime ETD { get; set; }
+        public string status { get; set; }
+        public HarborUser HarborUser { get; set; }
+        public List<PortService> PortService { get; set; } = new List<PortService>();
 
-        public void Schedule(Ship ship, Berth berth)
+        public void Schedule(Ship ship, Berth berth, DateTime arrival, DateTime departure)
         {
-            if (!berth.CheckAvailability())
-            {
-                throw new InvalidOperationException("Berth is not available for scheduling.");
-            }
-
-            AssignedShip = ship;
-            AssignedBerth = berth;
+            Ship = ship;
+            Berth = berth;
+            ArrivalTime = arrival;
+            DepartureTime = departure;
             Status = "Scheduled";
-
-            // langsung assign ke berth
-            berth.AssignShip(ship);
-            ArrivalTime = DateTime.Now;
         }
 
         public void CompleteAssignment()
         {
-            if (Status != "Scheduled")
+            // Cek apakah BerthAssignment ini memiliki properti Ship dan Berth
+            if (this.Ship == null || this.Berth == null)
             {
-                throw new InvalidOperationException("Assignment cannot be completed in current state.");
+                throw new InvalidOperationException("Assignment tidak lengkap. Tidak ada kapal atau dermaga yang ditugaskan.");
             }
 
+            // 1. Perbarui Status Tugas ini
             Status = "Completed";
-            AssignedBerth.ReleaseShip(AssignedShip);
-            DepartureTime = DateTime.Now;
-        }
 
+            // 2. MINTA SERVICE UNTUK MELEPAS DERMAGA DAN KAPAL
+            // Kita harus membuat instance PortService di sini atau melewatkannya sebagai parameter.
+
+            PortService service = new PortService(); // PANGGIL SERVICE LAYER
+
+            // Panggil fungsi pelepasan di PortService
+            service.ReleaseBerth(this.Berth, this.Ship);
+        }
         public string GetAssignmentInfo()
         {
-            return $"Assignment {AssignmentID}: Ship {AssignedShip.Name} at berth {AssignedBerth.BerthID} [{Status}]";
+            return $"AssignmentID: {AssignmentID}, Ship: {Ship?.Name ?? "N/A"}, Berth: {Berth?.Id ?? "N/A"}, Arrival: {ArrivalTime}, Departure: {DepartureTime}, Status: {Status}";
         }
     }
 }
