@@ -25,19 +25,24 @@ namespace HarborMaster
             // Contoh: Kapal akan sandar selama 48 jam (dapat disesuaikan)
             DateTime etd = eta.AddHours(48);
 
-            // Berikan ID ke kapal baru
-            ship.ShipID = (_nextShipId++).ToString();
+            // Berikan ID ke kapal baru jika belum ada
+            if (string.IsNullOrEmpty(ship.ShipID))
+            {
+                ship.ShipID = (_nextShipId++).ToString();
+            }
 
             // Loop untuk mencari dermaga yang cocok
             foreach (var berth in _berths)
             {
-                // **A. Cek Fisik (Draft):** Aturan anti-tabrakan/kerusakan dasar
-                if (ship.Draft > berth.MaxDraft)
+                // **A. Cek Kapasitas berdasarkan Tonnage (sebagai pengganti Draft):**
+                // Anggap setiap dermaga punya batas tonnage berdasarkan MaxLength * 100
+                decimal maxTonnage = (decimal)(berth.MaxLength * 100); 
+                if (ship.Tonnage > maxTonnage)
                 {
-                    continue; // Dermaga ini terlalu dangkal, coba dermaga berikutnya.
+                    continue; // Dermaga ini terlalu kecil untuk kapal ini
                 }
 
-                // **B. Cek Konflik Waktu (Sand Collision):**
+                // **B. Cek Konflik Waktu (Schedule Collision):**
                 bool isConflict = _assignments
                     .Where(a => a.Berth.Id == berth.Id && a.Status == "Scheduled") // Hanya cek dermaga yang sama & status aktif
                     .Any(a =>
@@ -59,11 +64,13 @@ namespace HarborMaster
                 // 3. Alokasi Sukses Ditemukan
                 BerthAssignment newAssignment = new BerthAssignment
                 {
+                    AssignmentID = Guid.NewGuid().ToString(),
                     Ship = ship,
                     Berth = berth,
                     ETA = eta,
                     ETD = etd,
-                    Status = "Scheduled"
+                    Status = "Scheduled",
+                    HarborUser = user
                 };
                 _assignments.Add(newAssignment);
                 return newAssignment; // Mengembalikan hasil alokasi
@@ -73,7 +80,7 @@ namespace HarborMaster
             throw new Exception("ALOKASI GAGAL: Tidak ditemukan dermaga yang sesuai atau semua jadwal bentrok.");
         }
 
-        // Metode untuk tampilan Dashboard (MainWindow.xaml.cs akan memanggil ini)
+        // Metode untuk tampilan Dashboard (MainForm akan memanggil ini)
         public IEnumerable<BerthAssignment> GetCurrentAssignments()
         {
             return _assignments.Where(a => a.Status == "Scheduled").ToList();
@@ -86,6 +93,7 @@ namespace HarborMaster
             DateTime etd = eta.AddHours(48);
             BerthAssignment forcedAssignment = new BerthAssignment
             {
+                AssignmentID = Guid.NewGuid().ToString(),
                 Ship = ship,
                 Berth = berth,
                 ETA = eta,
@@ -95,8 +103,6 @@ namespace HarborMaster
             _assignments.Add(forcedAssignment);
             return forcedAssignment;
         }
-
-        // File: PortService.cs
 
         public void ReleaseBerth(Berth berth, Ship ship)
         {
@@ -108,8 +114,122 @@ namespace HarborMaster
             // 2. Perbarui Status Dermaga (jika Anda ingin mengelolanya secara langsung)
             berth.Status = "Available";
 
-            // Catatan: Anda juga bisa menghapus assignment ini dari List<BerthAssignment> _assignments
-            // atau mengubah statusnya menjadi "Completed" di PortService.
+            // 3. Update assignment status
+            var assignment = _assignments.FirstOrDefault(a => a.Ship.ShipID == ship.ShipID && a.Berth.Id == berth.Id);
+            if (assignment != null)
+            {
+                assignment.Status = "Completed";
+            }
+        }
+
+        // === TAMBAHAN: Methods dari HarborMasterController ===
+
+        /// <summary>
+        /// Create new berth assignment manually (from HarborMasterController)
+        /// </summary>
+        public BerthAssignment CreateAssignment(Ship ship, Berth berth, DateTime arrival, DateTime departure, HarborUser user)
+        {
+            var assignment = new BerthAssignment
+            {
+                AssignmentID = Guid.NewGuid().ToString(),
+                Ship = ship,
+                Berth = berth,
+                ETA = arrival,
+                ETD = departure,
+                Status = "Scheduled",
+                HarborUser = user
+            };
+
+            _assignments.Add(assignment);
+            return assignment;
+        }
+
+        /// <summary>
+        /// Monitor traffic for all ships (from HarborMasterController)
+        /// </summary>
+        public void MonitorTraffic(List<Ship> ships)
+        {
+            foreach (var ship in ships)
+            {
+                Console.WriteLine($"{ship.Name} is currently {ship.Status}");
+            }
+        }
+
+        /// <summary>
+        /// Generate harbor traffic report (from HarborMasterController)
+        /// </summary>
+        public string GenerateReport(List<BerthAssignment> assignments = null)
+        {
+            // Use current assignments if none provided
+            assignments = assignments ?? _assignments.ToList();
+
+            var report = new StringBuilder();
+            report.AppendLine("=== Harbor Traffic Report ===");
+            report.AppendLine($"Generated: {DateTime.Now:dd/MM/yyyy HH:mm}");
+            report.AppendLine();
+
+            if (!assignments.Any())
+            {
+                report.AppendLine("No assignments found.");
+                return report.ToString();
+            }
+
+            foreach (var assignment in assignments)
+            {
+                report.AppendLine(assignment.GetAssignmentInfo());
+            }
+
+            report.AppendLine();
+            report.AppendLine($"Total Assignments: {assignments.Count}");
+            report.AppendLine($"Active: {assignments.Count(a => a.Status == "Scheduled")}");
+            report.AppendLine($"Completed: {assignments.Count(a => a.Status == "Completed")}");
+
+            return report.ToString();
+        }
+
+        /// <summary>
+        /// Get all available berths
+        /// </summary>
+        public IEnumerable<Berth> GetAvailableBerths()
+        {
+            return _berths.Where(b => b.CheckAvailability());
+        }
+
+        /// <summary>
+        /// Get berth by ID
+        /// </summary>
+        public Berth GetBerth(string berthId)
+        {
+            return _berths.FirstOrDefault(b => b.Id == berthId);
+        }
+
+        /// <summary>
+        /// Get all berths
+        /// </summary>
+        public IEnumerable<Berth> GetAllBerths()
+        {
+            return _berths.AsReadOnly();
+        }
+
+        // Add backward compatibility method
+        public decimal CalculateCost(Ship ship)
+        {
+            return ship.CalculateDockingFee();
+        }
+        
+        public decimal CalculateCost()
+        {
+            return 0; // Default cost
+        }
+
+        public string GetServiceDescription()
+        {
+            return "Port Service";
+        }
+
+        public void RequestService(Ship ship)
+        {
+            // Default implementation
         }
     }
 }
