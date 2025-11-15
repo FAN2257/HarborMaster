@@ -1,0 +1,30 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="supabase-csharp" Version="0.16.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Exclude SQL files from build -->
+    <None Remove="**\*.sql" />
+    <Content Include="**\*.sql">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Exclude OldImplementation folder from compilation (kept for reference only) -->
+    <Compile Remove="OldImplementation\**" />
+    <EmbeddedResource Remove="OldImplementation\**" />
+    <None Remove="OldImplementation\**" />
+  </ItemGroup>
+
+</Project>

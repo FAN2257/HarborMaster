@@ -1,0 +1,17 @@
+﻿using HarborMaster.Models;
+using System.Threading.Tasks;
+
+namespace HarborMaster.Repositories
+{
+    public class UserRepository : BaseRepository<User, int>
+    {
+        // Metode ini spesifik untuk User
+        public async Task<User> GetByUsername(string username)
+        {
+            var response = await _client.From<User>()
+                                        .Where(u => u.Username == username)
+                                        .Single();
+            return response;
+        }
+    }
+}

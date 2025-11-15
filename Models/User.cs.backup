@@ -1,0 +1,38 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Postgrest.Models;
+using Postgrest.Attributes;
+using System.Text.Json.Serialization;
+using HarborMasterNice.Models; // If you need to reference the namespace, use this instead
+
+namespace HarborMasterNice.Models
+{
+    [Table("users")]
+    public class User : BaseModel
+    {
+        [PrimaryKey("id", true)]
+        public int Id { get; set; }
+        [Column("username")]
+        public string Username { get; set; }
+        [Column("full_name")]
+        public string FullName { get; set; }
+        //public string PasswordHash { get; set; }
+        [Column("role")]
+        public UserRole Role { get; set; }
+        [Column("password_hash")]
+        public string? PasswordHash { get; set; }
+
+        // Removed [JsonIgnore] from method, as it's not valid here
+        public bool CanOverrideAllocation() // <-- UBAH DARI '=>' MENJADI METODE ()
+        {
+            return Role == UserRole.HarborMaster;
+        }
+
+        // Perbaikan tambahan: Pastikan properti BaseModel diabaikan (jika belum)
+        [JsonIgnore]
+        public new string? BaseUrl => null;
+    }
+}
