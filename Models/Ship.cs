@@ -30,6 +30,14 @@ namespace HarborMaster.Models
         public int Id { get; set; }
 
         /// <summary>
+        /// Owner of this ship (User ID)
+        /// Foreign key to users table
+        /// Nullable for backward compatibility with existing ships
+        /// </summary>
+        [Column("owner_id")]
+        public int? OwnerId { get; set; }
+
+        /// <summary>
         /// Ship name with validation (ENCAPSULATION)
         /// </summary>
         [Column("name")]
@@ -220,7 +228,7 @@ namespace HarborMaster.Models
 
             bool lengthOk = this.LengthOverall <= berth.MaxLength;
             bool draftOk = this.Draft <= berth.MaxDraft;
-            bool available = berth.IsAvailable;
+            bool available = berth.IsAvailableForDocking();
 
             return lengthOk && draftOk && available;
         }

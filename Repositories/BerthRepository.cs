@@ -14,7 +14,7 @@ namespace HarborMaster.Repositories
         public async Task<List<Berth>> GetPhysicallySuitableBerths(double shipLength, double shipDraft)
         {
             var response = await _client.From<Berth>()
-                                        .Where(b => b.IsAvailable == true)
+                                        .Where(b => b.Status == "Available")
                                         .Where(b => b.MaxLength >= shipLength)
                                         .Where(b => b.MaxDraft >= shipDraft)
                                         .Get();

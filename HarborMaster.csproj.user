@@ -1,10 +1,31 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
+    <Compile Update="Archives\v0-oldest\OldImplementation\ArrivalForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Archives\v0-oldest\OldImplementation\DemoForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Archives\v0-oldest\OldImplementation\MainForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Archives\v1-simple\HarborMaster\ArrivalForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Archives\v1-simple\HarborMaster\DemoForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Archives\v1-simple\HarborMaster\MainForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Update="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Update="Views\AddShipDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Views\BerthStatusView.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Update="Views\LoginWindow.cs">
@@ -13,7 +34,19 @@
     <Compile Update="Views\MainWindow.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Update="Views\MyRequestsView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Views\MyShipsView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Views\PendingRequestsView.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Update="Views\RegisterWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Views\SubmitDockingRequestView.cs">
       <SubType>Form</SubType>
     </Compile>
   </ItemGroup>

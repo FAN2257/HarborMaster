@@ -22,6 +22,15 @@ namespace HarborMaster.Views
         private Button btnRefreshData;
         private Button btnBack;
 
+        // ShipOwner specific buttons
+        private Button btnMyShips;
+        private Button btnSubmitRequest;
+        private Button btnMyRequests;
+
+        // Operator specific buttons
+        private Button btnPendingRequests;
+        private Button btnBerthStatus;
+
         // Kartu Metrik Dashboard
         private Panel cardTotalKapal;
         private Label lblCardTotalKapalTitle;
@@ -176,6 +185,102 @@ namespace HarborMaster.Views
             Application.Restart();
         }
 
+        // ShipOwner specific event handlers
+        private void btnMyShips_Click(object sender, EventArgs e)
+        {
+            MyShipsView myShipsView = new MyShipsView(_currentUser);
+            myShipsView.ShowDialog();
+        }
+
+        private void btnSubmitRequest_Click(object sender, EventArgs e)
+        {
+            SubmitDockingRequestView submitView = new SubmitDockingRequestView(_currentUser);
+            DialogResult result = submitView.ShowDialog();
+
+            if (result == DialogResult.OK)
+            {
+                // Refresh data after submitting request
+                _ = _presenter.LoadInitialDataAsync(_currentUser);
+            }
+        }
+
+        private void btnMyRequests_Click(object sender, EventArgs e)
+        {
+            MyRequestsView requestsView = new MyRequestsView(_currentUser);
+            requestsView.ShowDialog();
+        }
+
+        // Operator specific event handlers
+        private void btnPendingRequests_Click(object sender, EventArgs e)
+        {
+            PendingRequestsView pendingView = new PendingRequestsView(_currentUser);
+            pendingView.ShowDialog();
+
+            // Refresh data after closing (in case requests were approved/rejected)
+            _ = _presenter.LoadInitialDataAsync(_currentUser);
+        }
+
+        private void btnBerthStatus_Click(object sender, EventArgs e)
+        {
+            BerthStatusView berthView = new BerthStatusView();
+            berthView.ShowDialog();
+        }
+
+        /// <summary>
+        /// Configure UI elements based on user role
+        /// </summary>
+        private void ConfigureRoleBasedUI()
+        {
+            string userRole = _currentUser.Role.ToString();
+
+            // ShipOwner role
+            if (userRole == "ShipOwner")
+            {
+                // Show ShipOwner specific buttons
+                btnMyShips.Visible = true;
+                btnSubmitRequest.Visible = true;
+                btnMyRequests.Visible = true;
+
+                // Hide operator/general buttons
+                btnAddShip.Visible = false;
+                btnPendingRequests.Visible = false;
+                btnBerthStatus.Visible = false;
+
+                // Update title
+                lblTitle.Text = "Ship Owner Dashboard";
+            }
+            // Operator role
+            else if (userRole == "Operator")
+            {
+                // Hide ShipOwner buttons
+                btnMyShips.Visible = false;
+                btnSubmitRequest.Visible = false;
+                btnMyRequests.Visible = false;
+
+                // Show operator buttons
+                btnAddShip.Visible = true;
+                btnPendingRequests.Visible = true;
+                btnBerthStatus.Visible = true;
+
+                lblTitle.Text = "Operator Dashboard";
+            }
+            // HarborMaster role
+            else if (userRole == "HarborMaster")
+            {
+                // Hide ShipOwner buttons
+                btnMyShips.Visible = false;
+                btnSubmitRequest.Visible = false;
+                btnMyRequests.Visible = false;
+
+                // Show all operator buttons (HarborMaster has same + more features)
+                btnAddShip.Visible = true;
+                btnPendingRequests.Visible = true;
+                btnBerthStatus.Visible = true;
+
+                lblTitle.Text = "Harbor Master Dashboard";
+            }
+        }
+
         // --- KODE DESAIN MANUAL ---
 
         private void InitializeManualUI()
@@ -240,10 +345,80 @@ namespace HarborMaster.Views
             btnBack.Cursor = Cursors.Hand;
             btnBack.Click += btnBack_Click;
 
+            // ShipOwner specific buttons
+            btnMyShips = new Button();
+            btnMyShips.Text = "📦 My Ships";
+            btnMyShips.Size = new Size(130, 40);
+            btnMyShips.Location = new Point(500, 20);
+            btnMyShips.BackColor = Color.FromArgb(156, 39, 176); // Purple
+            btnMyShips.ForeColor = Color.White;
+            btnMyShips.FlatStyle = FlatStyle.Flat;
+            btnMyShips.FlatAppearance.BorderSize = 0;
+            btnMyShips.Font = new Font("Segoe UI", 10, FontStyle.Bold);
+            btnMyShips.Cursor = Cursors.Hand;
+            btnMyShips.Click += btnMyShips_Click;
+
+            btnSubmitRequest = new Button();
+            btnSubmitRequest.Text = "📝 Submit Request";
+            btnSubmitRequest.Size = new Size(150, 40);
+            btnSubmitRequest.Location = new Point(640, 20);
+            btnSubmitRequest.BackColor = Color.FromArgb(255, 152, 0); // Orange
+            btnSubmitRequest.ForeColor = Color.White;
+            btnSubmitRequest.FlatStyle = FlatStyle.Flat;
+            btnSubmitRequest.FlatAppearance.BorderSize = 0;
+            btnSubmitRequest.Font = new Font("Segoe UI", 10, FontStyle.Bold);
+            btnSubmitRequest.Cursor = Cursors.Hand;
+            btnSubmitRequest.Click += btnSubmitRequest_Click;
+
+            btnMyRequests = new Button();
+            btnMyRequests.Text = "📋 My Requests";
+            btnMyRequests.Size = new Size(140, 40);
+            btnMyRequests.Location = new Point(800, 20);
+            btnMyRequests.BackColor = Color.FromArgb(0, 150, 136); // Teal
+            btnMyRequests.ForeColor = Color.White;
+            btnMyRequests.FlatStyle = FlatStyle.Flat;
+            btnMyRequests.FlatAppearance.BorderSize = 0;
+            btnMyRequests.Font = new Font("Segoe UI", 10, FontStyle.Bold);
+            btnMyRequests.Cursor = Cursors.Hand;
+            btnMyRequests.Click += btnMyRequests_Click;
+
+            // Operator specific buttons
+            btnPendingRequests = new Button();
+            btnPendingRequests.Text = "⏳ Pending Requests";
+            btnPendingRequests.Size = new Size(160, 40);
+            btnPendingRequests.Location = new Point(500, 20);
+            btnPendingRequests.BackColor = Color.FromArgb(255, 152, 0); // Orange
+            btnPendingRequests.ForeColor = Color.White;
+            btnPendingRequests.FlatStyle = FlatStyle.Flat;
+            btnPendingRequests.FlatAppearance.BorderSize = 0;
+            btnPendingRequests.Font = new Font("Segoe UI", 10, FontStyle.Bold);
+            btnPendingRequests.Cursor = Cursors.Hand;
+            btnPendingRequests.Click += btnPendingRequests_Click;
+
+            btnBerthStatus = new Button();
+            btnBerthStatus.Text = "⚓ Berth Status";
+            btnBerthStatus.Size = new Size(140, 40);
+            btnBerthStatus.Location = new Point(670, 20);
+            btnBerthStatus.BackColor = Color.FromArgb(0, 150, 136); // Teal
+            btnBerthStatus.ForeColor = Color.White;
+            btnBerthStatus.FlatStyle = FlatStyle.Flat;
+            btnBerthStatus.FlatAppearance.BorderSize = 0;
+            btnBerthStatus.Font = new Font("Segoe UI", 10, FontStyle.Bold);
+            btnBerthStatus.Cursor = Cursors.Hand;
+            btnBerthStatus.Click += btnBerthStatus_Click;
+
             panelHeader.Controls.Add(lblTitle);
             panelHeader.Controls.Add(btnAddShip);
+            panelHeader.Controls.Add(btnMyShips);
+            panelHeader.Controls.Add(btnSubmitRequest);
+            panelHeader.Controls.Add(btnMyRequests);
+            panelHeader.Controls.Add(btnPendingRequests);
+            panelHeader.Controls.Add(btnBerthStatus);
             panelHeader.Controls.Add(btnRefreshData);
             panelHeader.Controls.Add(btnBack);
+
+            // Configure button visibility based on user role
+            ConfigureRoleBasedUI();
 
             // --- Kartu 1: Total Kapal (Biru) ---
             cardTotalKapal = new Panel();

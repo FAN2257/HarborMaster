@@ -27,4 +27,11 @@
     <None Remove="OldImplementation\**" />
   </ItemGroup>
 
+  <ItemGroup>
+    <!-- Exclude Archives folder from compilation (archived implementations) -->
+    <Compile Remove="Archives\**" />
+    <EmbeddedResource Remove="Archives\**" />
+    <None Remove="Archives\**" />
+  </ItemGroup>
+
 </Project>

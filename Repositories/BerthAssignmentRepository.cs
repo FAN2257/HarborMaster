@@ -37,5 +37,18 @@ namespace HarborMaster.Repositories
 
             return response.Models;
         }
+
+        /// <summary>
+        /// Get all berth assignments for a specific ship
+        /// </summary>
+        public async Task<List<BerthAssignment>> GetByShipId(int shipId)
+        {
+            var response = await _client.From<BerthAssignment>()
+                .Where(a => a.ShipId == shipId)
+                .Order("created_at", Postgrest.Constants.Ordering.Descending)
+                .Get();
+
+            return response.Models;
+        }
     }
 }
