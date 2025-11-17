@@ -11,6 +11,9 @@ namespace HarborMaster.Views
         // Presenter
         private readonly ShipArrivalPresenter _presenter;
 
+        // Current user (for Ship Owner)
+        private readonly Models.User? _currentUser;
+
         // UI Controls
         private Panel panelMain;
         private Label lblTitle;
@@ -36,17 +39,25 @@ namespace HarborMaster.Views
         private Label lblError;
         private Label lblSuccess;
 
-        public AddShipDialog()
+        public AddShipDialog(Models.User? user = null)
         {
             InitializeComponent();
+            _currentUser = user;
             _presenter = new ShipArrivalPresenter(this);
             InitializeManualUI();
+
+            // Update title based on who is adding the ship
+            if (_currentUser != null && _currentUser.Role == Models.UserRole.ShipOwner)
+            {
+                lblTitle.Text = "Add My Ship";
+            }
         }
 
         // --- Implementasi Interface IAddShipDialog ---
 
         public string ShipName => txtNamaKapal.Text.Trim();
         public string ImoNumber => txtImoNumber.Text.Trim();
+        public int? OwnerId => _currentUser?.Id; // Auto-set dari current user jika ada
         public decimal ShipLength
         {
             get

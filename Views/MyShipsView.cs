@@ -19,6 +19,7 @@ namespace HarborMaster.Views
         // UI Controls
         private Panel panelHeader;
         private Label lblTitle;
+        private Button btnEdit;
         private Button btnClose;
         private Button btnRefresh;
         private DataGridView dgvShips;
@@ -112,6 +113,32 @@ namespace HarborMaster.Views
             this.Close();
         }
 
+        private async void btnEdit_Click(object sender, EventArgs e)
+        {
+            // Check if a ship is selected
+            if (dgvShips.SelectedRows.Count == 0)
+            {
+                MessageBox.Show("Pilih kapal yang ingin di-edit terlebih dahulu.", "Informasi",
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            // Get selected ship
+            Ship selectedShip = (Ship)dgvShips.SelectedRows[0].DataBoundItem;
+
+            // Open EditShipDialog
+            EditShipDialog dialog = new EditShipDialog(selectedShip, _currentUser);
+            DialogResult result = dialog.ShowDialog();
+
+            if (result == DialogResult.OK)
+            {
+                // Refresh the list after successful edit
+                await _presenter.LoadMyShipsAsync();
+                MessageBox.Show("Data kapal berhasil diperbarui!", "Success",
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+        }
+
         // --- Manual UI Initialization ---
 
         private void InitializeManualUI()
@@ -136,6 +163,19 @@ namespace HarborMaster.Views
             lblTitle.ForeColor = Color.FromArgb(44, 62, 80);
             lblTitle.Location = new Point(20, 25);
             lblTitle.AutoSize = true;
+
+            // Edit Button
+            btnEdit = new Button();
+            btnEdit.Text = "✏️ Edit";
+            btnEdit.Size = new Size(110, 40);
+            btnEdit.Location = new Point(530, 20);
+            btnEdit.BackColor = Color.FromArgb(230, 126, 34); // Orange
+            btnEdit.ForeColor = Color.White;
+            btnEdit.FlatStyle = FlatStyle.Flat;
+            btnEdit.FlatAppearance.BorderSize = 0;
+            btnEdit.Font = new Font("Segoe UI", 10, FontStyle.Bold);
+            btnEdit.Cursor = Cursors.Hand;
+            btnEdit.Click += btnEdit_Click;
 
             // Refresh Button
             btnRefresh = new Button();
@@ -164,6 +204,7 @@ namespace HarborMaster.Views
             btnClose.Click += btnClose_Click;
 
             panelHeader.Controls.Add(lblTitle);
+            panelHeader.Controls.Add(btnEdit);
             panelHeader.Controls.Add(btnRefresh);
             panelHeader.Controls.Add(btnClose);
 

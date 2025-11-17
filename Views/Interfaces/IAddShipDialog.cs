@@ -10,6 +10,7 @@ namespace HarborMaster.Views.Interfaces
         decimal ShipLength { get; }
         decimal ShipDraft { get; }
         string ShipType { get; }
+        int? OwnerId { get; } // Owner ID for Ship Owner role (nullable for backward compatibility)
 
         // Input properties - Arrival Schedule
         DateTime ETA { get; }

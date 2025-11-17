@@ -116,7 +116,8 @@ namespace HarborMaster.Services
             double draft,
             string shipType,
             DateTime eta,
-            DateTime etd)
+            DateTime etd,
+            int? ownerId = null)
         {
             var result = new ShipArrivalResult();
 
@@ -156,7 +157,8 @@ namespace HarborMaster.Services
                         ImoNumber = imoNumber,
                         LengthOverall = length,
                         Draft = draft,
-                        ShipType = shipType
+                        ShipType = shipType,
+                        OwnerId = ownerId // Set owner ID if provided (for Ship Owner role)
                     };
 
                     // Validate dimensions manually

@@ -65,6 +65,9 @@ namespace HarborMaster.Presenters
                     return;
                 }
 
+                // Get owner ID if available (for Ship Owner role)
+                int? ownerId = _view.OwnerId;
+
                 // Call service to process arrival
                 var result = await _portService.ProcessShipArrival(
                     shipName,
@@ -73,7 +76,8 @@ namespace HarborMaster.Presenters
                     (double)shipDraft,
                     shipType,
                     eta,
-                    etd
+                    etd,
+                    ownerId
                 );
 
                 if (result.IsSuccess)

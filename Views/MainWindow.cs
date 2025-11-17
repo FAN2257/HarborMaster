@@ -23,6 +23,7 @@ namespace HarborMaster.Views
         private Button btnBack;
 
         // ShipOwner specific buttons
+        private Button btnAddMyShip;
         private Button btnMyShips;
         private Button btnSubmitRequest;
         private Button btnMyRequests;
@@ -30,6 +31,9 @@ namespace HarborMaster.Views
         // Operator specific buttons
         private Button btnPendingRequests;
         private Button btnBerthStatus;
+
+        // HarborMaster specific buttons
+        private Button btnStatistics;
 
         // Kartu Metrik Dashboard
         private Panel cardTotalKapal;
@@ -186,6 +190,20 @@ namespace HarborMaster.Views
         }
 
         // ShipOwner specific event handlers
+        private void btnAddMyShip_Click(object sender, EventArgs e)
+        {
+            // Open AddShipDialog for Ship Owner to add their own ship
+            AddShipDialog dialog = new AddShipDialog(_currentUser);
+            DialogResult result = dialog.ShowDialog();
+
+            if (result == DialogResult.OK)
+            {
+                // Refresh data setelah berhasil menambah kapal
+                _ = _presenter.LoadInitialDataAsync(_currentUser);
+                MessageBox.Show("Kapal berhasil ditambahkan!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+        }
+
         private void btnMyShips_Click(object sender, EventArgs e)
         {
             MyShipsView myShipsView = new MyShipsView(_currentUser);
@@ -226,6 +244,13 @@ namespace HarborMaster.Views
             berthView.ShowDialog();
         }
 
+        // HarborMaster specific event handlers
+        private void btnStatistics_Click(object sender, EventArgs e)
+        {
+            HarborMasterStatisticsView statisticsView = new HarborMasterStatisticsView();
+            statisticsView.ShowDialog();
+        }
+
         /// <summary>
         /// Configure UI elements based on user role
         /// </summary>
@@ -237,6 +262,7 @@ namespace HarborMaster.Views
             if (userRole == "ShipOwner")
             {
                 // Show ShipOwner specific buttons
+                btnAddMyShip.Visible = true;
                 btnMyShips.Visible = true;
                 btnSubmitRequest.Visible = true;
                 btnMyRequests.Visible = true;
@@ -246,6 +272,15 @@ namespace HarborMaster.Views
                 btnPendingRequests.Visible = false;
                 btnBerthStatus.Visible = false;
 
+                // Hide HarborMaster exclusive buttons
+                btnStatistics.Visible = false;
+
+                // Reposition ShipOwner buttons to avoid overlap (4 buttons now)
+                btnAddMyShip.Location = new Point(450, 20);
+                btnMyShips.Location = new Point(610, 20);
+                btnSubmitRequest.Location = new Point(750, 20);
+                btnMyRequests.Location = new Point(910, 20);
+
                 // Update title
                 lblTitle.Text = "Ship Owner Dashboard";
             }
@@ -253,14 +288,22 @@ namespace HarborMaster.Views
             else if (userRole == "Operator")
             {
                 // Hide ShipOwner buttons
+                btnAddMyShip.Visible = false;
                 btnMyShips.Visible = false;
                 btnSubmitRequest.Visible = false;
                 btnMyRequests.Visible = false;
 
-                // Show operator buttons
-                btnAddShip.Visible = true;
+                // Show operator buttons (NO Add Ship - operators don't add ships)
+                btnAddShip.Visible = false;
                 btnPendingRequests.Visible = true;
                 btnBerthStatus.Visible = true;
+
+                // Hide HarborMaster exclusive buttons
+                btnStatistics.Visible = false;
+
+                // Reposition Operator buttons (only 2 buttons now)
+                btnPendingRequests.Location = new Point(500, 20);
+                btnBerthStatus.Location = new Point(670, 20);
 
                 lblTitle.Text = "Operator Dashboard";
             }
@@ -268,25 +311,41 @@ namespace HarborMaster.Views
             else if (userRole == "HarborMaster")
             {
                 // Hide ShipOwner buttons
+                btnAddMyShip.Visible = false;
                 btnMyShips.Visible = false;
                 btnSubmitRequest.Visible = false;
                 btnMyRequests.Visible = false;
 
-                // Show all operator buttons (HarborMaster has same + more features)
-                btnAddShip.Visible = true;
+                // Hide Add Ship - HarborMaster tidak menambah kapal (Ship Owner yang menambahkan)
+                btnAddShip.Visible = false;
+
+                // Show operator buttons
                 btnPendingRequests.Visible = true;
                 btnBerthStatus.Visible = true;
 
+                // Show HarborMaster exclusive buttons
+                btnStatistics.Visible = true;
+
+                // Reposition HarborMaster buttons (3 buttons: Pending, Berth, Statistics)
+                btnPendingRequests.Location = new Point(500, 20);
+                btnBerthStatus.Location = new Point(670, 20);
+                btnStatistics.Location = new Point(830, 20);
+
                 lblTitle.Text = "Harbor Master Dashboard";
             }
+
+            // Common buttons always visible and at the end (right side) - adjusted for 1400px width
+            btnRefreshData.Visible = true;
+            btnRefreshData.Location = new Point(1130, 20);
+            btnBack.Location = new Point(1280, 20);
         }
 
         // --- KODE DESAIN MANUAL ---
 
         private void InitializeManualUI()
         {
-            // Atur Form Utama
-            this.ClientSize = new Size(1200, 700);
+            // Atur Form Utama (diperbesar untuk accommodate semua buttons tanpa overlap)
+            this.ClientSize = new Size(1400, 700);
             this.StartPosition = FormStartPosition.CenterScreen;
             this.BackColor = Color.FromArgb(245, 247, 250); // Background abu-abu terang
             this.Text = "HarborMaster - Dashboard";
@@ -346,6 +405,18 @@ namespace HarborMaster.Views
             btnBack.Click += btnBack_Click;
 
             // ShipOwner specific buttons
+            btnAddMyShip = new Button();
+            btnAddMyShip.Text = "➕ Add Ship";
+            btnAddMyShip.Size = new Size(140, 40);
+            btnAddMyShip.Location = new Point(450, 20);
+            btnAddMyShip.BackColor = Color.FromArgb(76, 175, 80); // Green
+            btnAddMyShip.ForeColor = Color.White;
+            btnAddMyShip.FlatStyle = FlatStyle.Flat;
+            btnAddMyShip.FlatAppearance.BorderSize = 0;
+            btnAddMyShip.Font = new Font("Segoe UI", 10, FontStyle.Bold);
+            btnAddMyShip.Cursor = Cursors.Hand;
+            btnAddMyShip.Click += btnAddMyShip_Click;
+
             btnMyShips = new Button();
             btnMyShips.Text = "📦 My Ships";
             btnMyShips.Size = new Size(130, 40);
@@ -407,13 +478,28 @@ namespace HarborMaster.Views
             btnBerthStatus.Cursor = Cursors.Hand;
             btnBerthStatus.Click += btnBerthStatus_Click;
 
+            // HarborMaster specific buttons
+            btnStatistics = new Button();
+            btnStatistics.Text = "📊 Statistics";
+            btnStatistics.Size = new Size(140, 40);
+            btnStatistics.Location = new Point(820, 20);
+            btnStatistics.BackColor = Color.FromArgb(142, 68, 173); // Purple
+            btnStatistics.ForeColor = Color.White;
+            btnStatistics.FlatStyle = FlatStyle.Flat;
+            btnStatistics.FlatAppearance.BorderSize = 0;
+            btnStatistics.Font = new Font("Segoe UI", 10, FontStyle.Bold);
+            btnStatistics.Cursor = Cursors.Hand;
+            btnStatistics.Click += btnStatistics_Click;
+
             panelHeader.Controls.Add(lblTitle);
             panelHeader.Controls.Add(btnAddShip);
+            panelHeader.Controls.Add(btnAddMyShip);
             panelHeader.Controls.Add(btnMyShips);
             panelHeader.Controls.Add(btnSubmitRequest);
             panelHeader.Controls.Add(btnMyRequests);
             panelHeader.Controls.Add(btnPendingRequests);
             panelHeader.Controls.Add(btnBerthStatus);
+            panelHeader.Controls.Add(btnStatistics);
             panelHeader.Controls.Add(btnRefreshData);
             panelHeader.Controls.Add(btnBack);
 
@@ -423,7 +509,7 @@ namespace HarborMaster.Views
             // --- Kartu 1: Total Kapal (Biru) ---
             cardTotalKapal = new Panel();
             cardTotalKapal.BackColor = Color.FromArgb(52, 152, 219); // Biru
-            cardTotalKapal.Size = new Size(350, 120);
+            cardTotalKapal.Size = new Size(410, 120);
             cardTotalKapal.Location = new Point(30, 110);
 
             lblCardTotalKapalTitle = new Label();
@@ -446,8 +532,8 @@ namespace HarborMaster.Views
             // --- Kartu 2: Sedang Berlabuh (Hijau) ---
             cardSedangBerlabuh = new Panel();
             cardSedangBerlabuh.BackColor = Color.FromArgb(76, 175, 80); // Hijau
-            cardSedangBerlabuh.Size = new Size(350, 120);
-            cardSedangBerlabuh.Location = new Point(410, 110);
+            cardSedangBerlabuh.Size = new Size(410, 120);
+            cardSedangBerlabuh.Location = new Point(470, 110);
 
             lblCardSedangBerlabuhTitle = new Label();
             lblCardSedangBerlabuhTitle.Text = "Sedang Berlabuh";
@@ -469,8 +555,8 @@ namespace HarborMaster.Views
             // --- Kartu 3: Kapal Menunggu (Kuning) ---
             cardKapalMenunggu = new Panel();
             cardKapalMenunggu.BackColor = Color.FromArgb(255, 193, 7); // Kuning
-            cardKapalMenunggu.Size = new Size(350, 120);
-            cardKapalMenunggu.Location = new Point(790, 110);
+            cardKapalMenunggu.Size = new Size(410, 120);
+            cardKapalMenunggu.Location = new Point(910, 110);
 
             lblCardKapalMenungguTitle = new Label();
             lblCardKapalMenungguTitle.Text = "Kapal Menunggu";
@@ -492,7 +578,7 @@ namespace HarborMaster.Views
             // --- DataGridView untuk Tabel ---
             dgvSchedule = new DataGridView();
             dgvSchedule.Location = new Point(30, 260);
-            dgvSchedule.Size = new Size(1140, 400);
+            dgvSchedule.Size = new Size(1340, 400);
             dgvSchedule.BackgroundColor = Color.White;
             dgvSchedule.BorderStyle = BorderStyle.None;
             dgvSchedule.AllowUserToAddRows = false;

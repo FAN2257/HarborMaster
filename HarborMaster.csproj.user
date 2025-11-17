@@ -28,6 +28,12 @@
     <Compile Update="Views\BerthStatusView.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Update="Views\EditShipDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Views\HarborMasterStatisticsView.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Update="Views\LoginWindow.cs">
       <SubType>Form</SubType>
     </Compile>
