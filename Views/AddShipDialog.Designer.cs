@@ -29,14 +29,15 @@ namespace HarborMaster.Views
         private void InitializeComponent()
         {
             SuspendLayout();
-            //
+            // 
             // AddShipDialog
-            //
+            // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(500, 450);
             Name = "AddShipDialog";
             Text = "Input Kapal Baru";
+            Load += AddShipDialog_Load;
             ResumeLayout(false);
         }
 

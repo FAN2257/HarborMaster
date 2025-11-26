@@ -477,5 +477,10 @@ namespace HarborMaster.Views
             // Add panel to form
             this.Controls.Add(panelMain);
         }
+
+        private void AddShipDialog_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }

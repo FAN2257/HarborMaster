@@ -324,5 +324,10 @@ namespace HarborMaster.Views
             this.Controls.Add(dgvRequests);
             this.Controls.Add(lblLoading);
         }
+
+        private void MyRequestsView_Load_1(object sender, EventArgs e)
+        {
+
+        }
     }
 }

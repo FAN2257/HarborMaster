@@ -19,9 +19,6 @@
     <Compile Update="Archives\v1-simple\HarborMaster\MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Update="Form1.cs">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Update="Views\AddShipDialog.cs">
       <SubType>Form</SubType>
     </Compile>
