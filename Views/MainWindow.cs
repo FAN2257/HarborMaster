@@ -202,6 +202,12 @@ namespace HarborMaster.Views
             statisticsView.ShowDialog();
         }
 
+        private void btnProfile_Click(object sender, EventArgs e)
+        {
+            UserProfileWindow profileWindow = new UserProfileWindow(_currentUser);
+            profileWindow.ShowDialog();
+        }
+
         /// <summary>
         /// Configure UI elements based on user role
         /// </summary>
@@ -287,8 +293,12 @@ namespace HarborMaster.Views
 
             // Common buttons always visible and at the end (right side) - adjusted for 1400px width
             btnRefreshData.Visible = true;
-            btnRefreshData.Location = new Point(1130, 20);
-            btnBack.Location = new Point(1280, 20);
+            btnRefreshData.Location = new Point(1020, 20);
+
+            btnProfile.Visible = true;
+            btnProfile.Location = new Point(1180, 20);
+
+            btnBack.Location = new Point(1240, 20);
         }
     }
 }

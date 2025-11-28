@@ -11,19 +11,28 @@ namespace HarborMaster.Models
     {
         [PrimaryKey("id", true)]
         public int Id { get; set; }
-        
+
         [Column("username")]
         public string Username { get; set; }
-        
+
         [Column("full_name")]
         public string FullName { get; set; }
-        
+
         [Column("role")]
         [JsonConverter(typeof(StringEnumConverter))]
         public UserRole Role { get; set; }
-        
+
         [Column("password_hash")]
         public string? PasswordHash { get; set; }
+
+        [Column("email")]
+        public string? Email { get; set; }
+
+        [Column("phone")]
+        public string? Phone { get; set; }
+
+        [Column("company_name")]
+        public string? CompanyName { get; set; }
 
         public bool CanOverrideAllocation()
         {
