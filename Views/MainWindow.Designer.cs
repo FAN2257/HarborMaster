@@ -32,6 +32,7 @@
             DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
             DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
             panelHeader = new Panel();
+            btnProfile = new Button();
             btnStatistics = new Button();
             btnBerthStatus = new Button();
             btnPendingRequests = new Button();
@@ -66,6 +67,7 @@
             // panelHeader
             // 
             panelHeader.BackColor = Color.White;
+            panelHeader.Controls.Add(btnProfile);
             panelHeader.Controls.Add(btnStatistics);
             panelHeader.Controls.Add(btnBerthStatus);
             panelHeader.Controls.Add(btnPendingRequests);
@@ -82,6 +84,22 @@
             panelHeader.Name = "panelHeader";
             panelHeader.Size = new Size(1400, 80);
             panelHeader.TabIndex = 0;
+            // 
+            // btnProfile
+            // 
+            btnProfile.BackColor = Color.FromArgb(96, 125, 139);
+            btnProfile.Cursor = Cursors.Hand;
+            btnProfile.FlatAppearance.BorderSize = 0;
+            btnProfile.FlatStyle = FlatStyle.Flat;
+            btnProfile.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            btnProfile.ForeColor = Color.White;
+            btnProfile.Location = new Point(1056, 20);
+            btnProfile.Name = "btnProfile";
+            btnProfile.Size = new Size(140, 40);
+            btnProfile.TabIndex = 11;
+            btnProfile.Text = "👤 My Profile";
+            btnProfile.UseVisualStyleBackColor = false;
+            btnProfile.Click += btnProfile_Click;
             // 
             // btnStatistics
             // 
@@ -462,6 +480,7 @@
         private System.Windows.Forms.Button btnPendingRequests;
         private System.Windows.Forms.Button btnBerthStatus;
         private System.Windows.Forms.Button btnStatistics;
+        private System.Windows.Forms.Button btnProfile;
         private System.Windows.Forms.Panel cardTotalKapal;
         private System.Windows.Forms.Label lblCardTotalKapalValue;
         private System.Windows.Forms.Label lblCardTotalKapalTitle;

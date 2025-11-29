@@ -52,5 +52,8 @@
     <Compile Update="Views\SubmitDockingRequestView.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Update="Views\UserProfileWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
   </ItemGroup>
 </Project>
