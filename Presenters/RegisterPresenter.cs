@@ -1,4 +1,5 @@
-﻿using HarborMaster.Services;
+﻿using HarborMaster.Models;
+using HarborMaster.Services;
 using HarborMaster.Views.Interfaces;
 using System.Threading.Tasks;
 
@@ -25,30 +26,49 @@ namespace HarborMaster.Presenters
             try
             {
                 // 1. Ambil input dari View
-                string username = _view.Username;
+                string email = _view.Username; // Email field mapped to Username property
                 string password = _view.Password;
                 string confirm = _view.ConfirmPassword;
                 string fullName = _view.FullName;
+                UserRole selectedRole = _view.SelectedRole; // Get selected role
 
                 // 2. Validasi Sederhana di Presenter
+                if (string.IsNullOrWhiteSpace(email))
+                {
+                    _view.ErrorMessage = "Email tidak boleh kosong.";
+                    return;
+                }
+
+                if (string.IsNullOrWhiteSpace(fullName))
+                {
+                    _view.ErrorMessage = "Nama lengkap tidak boleh kosong.";
+                    return;
+                }
+
                 if (password != confirm)
                 {
                     _view.ErrorMessage = "Password dan Konfirmasi Password tidak cocok.";
                     return;
                 }
 
-                // 3. Panggil Service untuk mendaftar
-                string errorMessage = await _authService.RegisterUserAsync(username, password, fullName);
+                if (password.Length < 6)
+                {
+                    _view.ErrorMessage = "Password minimal 6 karakter.";
+                    return;
+                }
+
+                // 3. Panggil Service untuk mendaftar dengan role
+                string errorMessage = await _authService.RegisterUserAsync(email, password, fullName, selectedRole);
 
                 if (string.IsNullOrEmpty(errorMessage))
                 {
                     // 4. Sukses
-                    _notificationService.ShowMessage("Registrasi berhasil! Silakan login.");
+                    _notificationService.ShowMessage($"Registrasi berhasil sebagai {GetRoleName(selectedRole)}! Silakan login dengan email Anda.");
                     _view.CloseView();
                 }
                 else
                 {
-                    // 5. Gagal (misal: username sudah ada)
+                    // 5. Gagal (misal: email sudah ada)
                     _view.ErrorMessage = errorMessage;
                 }
             }
@@ -71,6 +91,17 @@ namespace HarborMaster.Presenters
             {
                 _view.IsLoading = false;
             }
+        }
+
+        private string GetRoleName(UserRole role)
+        {
+            return role switch
+            {
+                UserRole.ShipOwner => "Ship Owner",
+                UserRole.Operator => "Operator",
+                UserRole.HarborMaster => "Harbor Master",
+                _ => "Unknown"
+            };
         }
     }
 }

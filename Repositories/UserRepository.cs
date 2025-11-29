@@ -13,5 +13,14 @@ namespace HarborMaster.Repositories
                                         .Single();
             return response;
         }
+
+        // New method: Get by email (primary method for login)
+        public async Task<User> GetByEmail(string email)
+        {
+            var response = await _client.From<User>()
+                                        .Where(u => u.Email == email)
+                                        .Single();
+            return response;
+        }
     }
 }

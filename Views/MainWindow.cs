@@ -290,5 +290,10 @@ namespace HarborMaster.Views
             btnRefreshData.Location = new Point(1130, 20);
             btnBack.Location = new Point(1280, 20);
         }
+
+        private void dgvSchedule_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
     }
 }

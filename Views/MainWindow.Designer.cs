@@ -389,6 +389,7 @@
             dgvSchedule.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgvSchedule.Size = new Size(1340, 400);
             dgvSchedule.TabIndex = 4;
+            dgvSchedule.CellContentClick += dgvSchedule_CellContentClick;
             // 
             // comboShips
             // 

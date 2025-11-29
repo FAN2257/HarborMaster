@@ -13,37 +13,52 @@ namespace HarborMaster.Services
             _userRepository = new UserRepository();
         }
 
-        public async Task<string> RegisterUserAsync(string username, string password, string fullName)
+        /// <summary>
+        /// Register new user with email, password, full name, and role
+        /// </summary>
+        public async Task<string> RegisterUserAsync(string email, string password, string fullName, UserRole role)
         {
             // 1. Validasi input
-            if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password))
+            if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(password))
             {
-                return "Username dan password tidak boleh kosong.";
+                return "Email dan password tidak boleh kosong.";
             }
 
-            // 2. Cek apakah user sudah ada
-            var existingUser = await _userRepository.GetByUsername(username);
+            if (string.IsNullOrWhiteSpace(fullName))
+            {
+                return "Nama lengkap tidak boleh kosong.";
+            }
+
+            // 2. Validate email format
+            if (!IsValidEmail(email))
+            {
+                return "Format email tidak valid.";
+            }
+
+            // 3. Cek apakah email sudah ada
+            var existingUser = await _userRepository.GetByEmail(email);
             if (existingUser != null)
             {
-                return "Username sudah digunakan. Silakan pilih yang lain.";
+                return "Email sudah terdaftar. Silakan gunakan email lain.";
             }
 
             // --- PERUBAHAN DI SINI ---
-            // 3. Hapus Hashing BCrypt (saat ini menyimpan plain untuk testing)
+            // 4. Hapus Hashing BCrypt (saat ini menyimpan plain untuk testing)
             // string hashedPassword = BCrypt.Net.BCrypt.HashPassword(password);
             // -------------------------
 
-            // 4. Buat objek User baru
+            // 5. Buat objek User baru
             User newUser = new User
             {
-                Username = username,
+                Username = email, // Username same as email for now
+                Email = email,
                 // Simpan password mentah (plain text)
                 PasswordHash = password, // <-- Gunakan password langsung
                 FullName = fullName,
-                Role = UserRole.Operator
+                Role = role
             };
 
-            // 5. Simpan ke database
+            // 6. Simpan ke database
             try
             {
                 await _userRepository.InsertAsync(newUser);
@@ -61,10 +76,12 @@ namespace HarborMaster.Services
             }
         }
 
-        // Return nullable User to avoid CS8603 when returning null
-        public async Task<User?> ValidateUser(string username, string password)
+        /// <summary>
+        /// Validate user login with email instead of username
+        /// </summary>
+        public async Task<User?> ValidateUser(string email, string password)
         {
-            User? user = await _userRepository.GetByUsername(username);
+            User? user = await _userRepository.GetByEmail(email);
             if (user == null)
             {
                 return null;
@@ -83,6 +100,19 @@ namespace HarborMaster.Services
             }
 
             return null;
+        }
+
+        private bool IsValidEmail(string email)
+        {
+            try
+            {
+                var addr = new System.Net.Mail.MailAddress(email);
+                return addr.Address == email;
+            }
+            catch
+            {
+                return false;
+            }
         }
     }
 }

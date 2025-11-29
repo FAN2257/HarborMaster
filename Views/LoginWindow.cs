@@ -2,6 +2,7 @@
 using HarborMaster.Presenters;
 using HarborMaster.Views.Interfaces;
 using System;
+using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
 namespace HarborMaster.Views
@@ -11,6 +12,15 @@ namespace HarborMaster.Views
     {
         // 2. Pegang referensi ke Presenter
         private readonly LoginPresenter _presenter;
+
+        // For draggable window
+        private const int WM_NCLBUTTONDOWN = 0xA1;
+        private const int HT_CAPTION = 0x2;
+
+        [DllImport("user32.dll")]
+        private static extern int SendMessage(IntPtr hWnd, int Msg, int wParam, int lParam);
+        [DllImport("user32.dll")]
+        private static extern bool ReleaseCapture();
 
         public LoginWindow()
         {
@@ -22,7 +32,7 @@ namespace HarborMaster.Views
 
         // --- Implementasi Interface ILoginView ---
 
-        public string Username => txtUsername?.Text ?? "";
+        public string Username => txtEmail?.Text ?? ""; // Email used as username
         public string Password => txtPassword?.Text ?? "";
         public User? LoggedInUser { get; private set; }
 
@@ -37,7 +47,7 @@ namespace HarborMaster.Views
             {
                 // Nonaktifkan tombol saat loading
                 if (btnLogin != null) btnLogin.Enabled = !value;
-                if (txtUsername != null) txtUsername.Enabled = !value;
+                if (txtEmail != null) txtEmail.Enabled = !value;
                 if (txtPassword != null) txtPassword.Enabled = !value;
                 if (btnLogin != null) btnLogin.Text = value ? "LOADING..." : "LOGIN";
             }
@@ -74,6 +84,41 @@ namespace HarborMaster.Views
             // Buat dan tampilkan RegisterWindow
             RegisterWindow regWindow = new RegisterWindow();
             regWindow.ShowViewAsDialog(); // Tampilkan sebagai dialog
+        }
+
+        // --- Window Control Handlers ---
+        private void btnMinimize_Click(object sender, EventArgs e)
+        {
+            this.WindowState = FormWindowState.Minimized;
+        }
+
+        private void btnMaximize_Click(object sender, EventArgs e)
+        {
+            if (this.WindowState == FormWindowState.Normal)
+            {
+                this.WindowState = FormWindowState.Maximized;
+                btnMaximize.Text = "❐"; // Restore icon
+            }
+            else
+            {
+                this.WindowState = FormWindowState.Normal;
+                btnMaximize.Text = "□"; // Maximize icon
+            }
+        }
+
+        private void btnClose_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
+        }
+
+        // Make title bar draggable
+        private void panelTitleBar_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                ReleaseCapture();
+                SendMessage(Handle, WM_NCLBUTTONDOWN, HT_CAPTION, 0);
+            }
         }
     }
 }

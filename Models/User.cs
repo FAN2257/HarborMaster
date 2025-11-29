@@ -9,11 +9,15 @@ namespace HarborMaster.Models
     [Table("users")]
     public class User : BaseModel
     {
-        [PrimaryKey("id", true)]
+        // ? FIX: Set shouldInsert = false untuk auto-increment field
+        [PrimaryKey("id", shouldInsert: false)] 
         public int Id { get; set; }
         
         [Column("username")]
         public string Username { get; set; }
+        
+        [Column("email")]
+        public string Email { get; set; }
         
         [Column("full_name")]
         public string FullName { get; set; }
