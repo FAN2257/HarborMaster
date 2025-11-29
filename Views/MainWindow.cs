@@ -209,96 +209,113 @@ namespace HarborMaster.Views
         }
 
         /// <summary>
-        /// Configure UI elements based on user role
+        /// Configure UI elements based on user role - FIXED: No more overlapping buttons
         /// </summary>
         private void ConfigureRoleBasedUI()
         {
             string userRole = _currentUser.Role.ToString();
 
+            // HIDE ALL BUTTONS FIRST to prevent overlap
+            btnAddMyShip.Visible = false;
+            btnMyShips.Visible = false;
+            btnSubmitRequest.Visible = false;
+            btnMyRequests.Visible = false;
+            btnAddShip.Visible = false;
+            btnPendingRequests.Visible = false;
+            btnBerthStatus.Visible = false;
+            btnStatistics.Visible = false;
+
+            int startX = 450; // Starting X position for role-specific buttons
+            int buttonWidth = 140;
+            int spacing = 10;
+            int currentX = startX;
+
             // ShipOwner role
             if (userRole == "ShipOwner")
             {
-                // Show ShipOwner specific buttons
-                btnAddMyShip.Visible = true;
-                btnMyShips.Visible = true;
-                btnSubmitRequest.Visible = true;
-                btnMyRequests.Visible = true;
-
-                // Hide operator/general buttons
-                btnAddShip.Visible = false;
-                btnPendingRequests.Visible = false;
-                btnBerthStatus.Visible = false;
-
-                // Hide HarborMaster exclusive buttons
-                btnStatistics.Visible = false;
-
-                // Reposition ShipOwner buttons to avoid overlap (4 buttons now)
-                btnAddMyShip.Location = new Point(450, 20);
-                btnMyShips.Location = new Point(610, 20);
-                btnSubmitRequest.Location = new Point(750, 20);
-                btnMyRequests.Location = new Point(910, 20);
-
-                // Update title
                 lblTitle.Text = "Ship Owner Dashboard";
+
+                // Show only ShipOwner buttons
+                btnAddMyShip.Visible = true;
+                btnAddMyShip.Location = new Point(currentX, 20);
+                btnAddMyShip.Text = "➕ Add Ship";
+                currentX += buttonWidth + spacing;
+
+                btnMyShips.Visible = true;
+                btnMyShips.Location = new Point(currentX, 20);
+                btnMyShips.Text = "📦 My Ships";
+                currentX += buttonWidth + spacing;
+
+                btnSubmitRequest.Visible = true;
+                btnSubmitRequest.Location = new Point(currentX, 20);
+                btnSubmitRequest.Text = "📝 Submit Request";
+                btnSubmitRequest.Width = 150;
+                currentX += 150 + spacing;
+
+                btnMyRequests.Visible = true;
+                btnMyRequests.Location = new Point(currentX, 20);
+                btnMyRequests.Text = "📋 My Requests";
+                currentX += buttonWidth + spacing;
             }
             // Operator role
             else if (userRole == "Operator")
             {
-                // Hide ShipOwner buttons
-                btnAddMyShip.Visible = false;
-                btnMyShips.Visible = false;
-                btnSubmitRequest.Visible = false;
-                btnMyRequests.Visible = false;
-
-                // Show operator buttons (NO Add Ship - operators don't add ships)
-                btnAddShip.Visible = false;
-                btnPendingRequests.Visible = true;
-                btnBerthStatus.Visible = true;
-
-                // Hide HarborMaster exclusive buttons
-                btnStatistics.Visible = false;
-
-                // Reposition Operator buttons (only 2 buttons now)
-                btnPendingRequests.Location = new Point(500, 20);
-                btnBerthStatus.Location = new Point(670, 20);
-
                 lblTitle.Text = "Operator Dashboard";
+
+                // Show only Operator buttons
+                btnPendingRequests.Visible = true;
+                btnPendingRequests.Location = new Point(currentX, 20);
+                btnPendingRequests.Text = "⏳ Pending Requests";
+                btnPendingRequests.Width = 160;
+                currentX += 160 + spacing;
+
+                btnBerthStatus.Visible = true;
+                btnBerthStatus.Location = new Point(currentX, 20);
+                btnBerthStatus.Text = "⚓ Berth Status";
+                currentX += buttonWidth + spacing;
             }
             // HarborMaster role
             else if (userRole == "HarborMaster")
             {
-                // Hide ShipOwner buttons
-                btnAddMyShip.Visible = false;
-                btnMyShips.Visible = false;
-                btnSubmitRequest.Visible = false;
-                btnMyRequests.Visible = false;
-
-                // Hide Add Ship - HarborMaster tidak menambah kapal (Ship Owner yang menambahkan)
-                btnAddShip.Visible = false;
-
-                // Show operator buttons
-                btnPendingRequests.Visible = true;
-                btnBerthStatus.Visible = true;
-
-                // Show HarborMaster exclusive buttons
-                btnStatistics.Visible = true;
-
-                // Reposition HarborMaster buttons (3 buttons: Pending, Berth, Statistics)
-                btnPendingRequests.Location = new Point(500, 20);
-                btnBerthStatus.Location = new Point(670, 20);
-                btnStatistics.Location = new Point(830, 20);
-
                 lblTitle.Text = "Harbor Master Dashboard";
+
+                // Show all Operator buttons + Statistics
+                btnPendingRequests.Visible = true;
+                btnPendingRequests.Location = new Point(currentX, 20);
+                btnPendingRequests.Text = "⏳ Pending Requests";
+                btnPendingRequests.Width = 160;
+                currentX += 160 + spacing;
+
+                btnBerthStatus.Visible = true;
+                btnBerthStatus.Location = new Point(currentX, 20);
+                btnBerthStatus.Text = "⚓ Berth Status";
+                currentX += buttonWidth + spacing;
+
+                btnStatistics.Visible = true;
+                btnStatistics.Location = new Point(currentX, 20);
+                btnStatistics.Text = "📊 Statistics";
+                currentX += buttonWidth + spacing;
             }
 
-            // Common buttons always visible and at the end (right side) - adjusted for 1400px width
+            // Common buttons - always visible at the far right
+            currentX += 50; // Extra spacing before common buttons
+
             btnRefreshData.Visible = true;
-            btnRefreshData.Location = new Point(1020, 20);
+            btnRefreshData.Location = new Point(currentX, 20);
+            btnRefreshData.Text = "🔄 Refresh";
+            btnRefreshData.Width = 120;
+            currentX += 120 + spacing;
 
             btnProfile.Visible = true;
-            btnProfile.Location = new Point(1180, 20);
+            btnProfile.Location = new Point(currentX, 20);
+            btnProfile.Text = "👤 Profile";
+            btnProfile.Width = 100;
+            currentX += 100 + spacing;
 
-            btnBack.Location = new Point(1240, 20);
+            btnBack.Visible = true;
+            btnBack.Location = new Point(currentX, 20);
+            btnBack.Text = "← Logout";
+            btnBack.Width = 100;
         }
 
         private void dgvSchedule_CellContentClick(object sender, DataGridViewCellEventArgs e)

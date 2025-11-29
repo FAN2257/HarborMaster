@@ -28,240 +28,241 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.panelLogin = new HarborMaster.Views.LoginWindow.RoundedPanel();
-            this.lblError = new System.Windows.Forms.Label();
-            this.btnGoToRegister = new System.Windows.Forms.Button();
-            this.btnLogin = new System.Windows.Forms.Button();
-            this.txtPassword = new System.Windows.Forms.TextBox();
-            this.lblPass = new System.Windows.Forms.Label();
-            this.txtEmail = new System.Windows.Forms.TextBox();
-            this.lblEmail = new System.Windows.Forms.Label();
-            this.lblSubtitle = new System.Windows.Forms.Label();
-            this.lblTitle = new System.Windows.Forms.Label();
-            this.panelTitleBar = new System.Windows.Forms.Panel();
-            this.btnClose = new System.Windows.Forms.Button();
-            this.btnMaximize = new System.Windows.Forms.Button();
-            this.btnMinimize = new System.Windows.Forms.Button();
-            this.lblTitleBar = new System.Windows.Forms.Label();
-            this.panelLogin.SuspendLayout();
-            this.panelTitleBar.SuspendLayout();
-            this.SuspendLayout();
+            panelLogin = new RoundedPanel();
+            lblError = new Label();
+            btnGoToRegister = new Button();
+            btnLogin = new Button();
+            txtPassword = new TextBox();
+            lblPass = new Label();
+            txtEmail = new TextBox();
+            lblEmail = new Label();
+            lblSubtitle = new Label();
+            lblTitle = new Label();
+            panelTitleBar = new Panel();
+            btnClose = new Button();
+            btnMaximize = new Button();
+            btnMinimize = new Button();
+            lblTitleBar = new Label();
+            panelLogin.SuspendLayout();
+            panelTitleBar.SuspendLayout();
+            SuspendLayout();
             // 
             // panelLogin
             // 
-            this.panelLogin.BackColor = System.Drawing.Color.White;
-            this.panelLogin.Controls.Add(this.lblError);
-            this.panelLogin.Controls.Add(this.btnGoToRegister);
-            this.panelLogin.Controls.Add(this.btnLogin);
-            this.panelLogin.Controls.Add(this.txtPassword);
-            this.panelLogin.Controls.Add(this.lblPass);
-            this.panelLogin.Controls.Add(this.txtEmail);
-            this.panelLogin.Controls.Add(this.lblEmail);
-            this.panelLogin.Controls.Add(this.lblSubtitle);
-            this.panelLogin.Controls.Add(this.lblTitle);
-            this.panelLogin.CornerRadius = 15;
-            this.panelLogin.Location = new System.Drawing.Point(300, 165);
-            this.panelLogin.Name = "panelLogin";
-            this.panelLogin.Size = new System.Drawing.Size(350, 420);
-            this.panelLogin.TabIndex = 0;
+            panelLogin.BackColor = Color.White;
+            panelLogin.Controls.Add(lblError);
+            panelLogin.Controls.Add(btnGoToRegister);
+            panelLogin.Controls.Add(btnLogin);
+            panelLogin.Controls.Add(txtPassword);
+            panelLogin.Controls.Add(lblPass);
+            panelLogin.Controls.Add(txtEmail);
+            panelLogin.Controls.Add(lblEmail);
+            panelLogin.Controls.Add(lblSubtitle);
+            panelLogin.Controls.Add(lblTitle);
+            panelLogin.CornerRadius = 15;
+            panelLogin.Location = new Point(300, 165);
+            panelLogin.Name = "panelLogin";
+            panelLogin.Size = new Size(350, 420);
+            panelLogin.TabIndex = 0;
+            panelLogin.Paint += panelLogin_Paint;
             // 
             // lblError
             // 
-            this.lblError.AutoSize = true;
-            this.lblError.Font = new System.Drawing.Font("Segoe UI", 8F);
-            this.lblError.ForeColor = System.Drawing.Color.Red;
-            this.lblError.Location = new System.Drawing.Point(40, 375);
-            this.lblError.MaximumSize = new System.Drawing.Size(270, 0);
-            this.lblError.Name = "lblError";
-            this.lblError.Size = new System.Drawing.Size(0, 19);
-            this.lblError.TabIndex = 8;
+            lblError.AutoSize = true;
+            lblError.Font = new Font("Segoe UI", 8F);
+            lblError.ForeColor = Color.Red;
+            lblError.Location = new Point(40, 375);
+            lblError.MaximumSize = new Size(270, 0);
+            lblError.Name = "lblError";
+            lblError.Size = new Size(0, 19);
+            lblError.TabIndex = 8;
             // 
             // btnGoToRegister
             // 
-            this.btnGoToRegister.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(181)))), ((int)(((byte)(246)))));
-            this.btnGoToRegister.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnGoToRegister.FlatAppearance.BorderSize = 0;
-            this.btnGoToRegister.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnGoToRegister.Font = new System.Drawing.Font("Segoe UI", 10F);
-            this.btnGoToRegister.ForeColor = System.Drawing.Color.White;
-            this.btnGoToRegister.Location = new System.Drawing.Point(40, 325);
-            this.btnGoToRegister.Name = "btnGoToRegister";
-            this.btnGoToRegister.Size = new System.Drawing.Size(270, 40);
-            this.btnGoToRegister.TabIndex = 7;
-            this.btnGoToRegister.Text = "Belum punya akun? Daftar disini";
-            this.btnGoToRegister.UseVisualStyleBackColor = false;
-            this.btnGoToRegister.Click += new System.EventHandler(this.btnGoToRegister_Click);
+            btnGoToRegister.BackColor = Color.FromArgb(100, 181, 246);
+            btnGoToRegister.Cursor = Cursors.Hand;
+            btnGoToRegister.FlatAppearance.BorderSize = 0;
+            btnGoToRegister.FlatStyle = FlatStyle.Flat;
+            btnGoToRegister.Font = new Font("Segoe UI", 10F);
+            btnGoToRegister.ForeColor = Color.White;
+            btnGoToRegister.Location = new Point(40, 325);
+            btnGoToRegister.Name = "btnGoToRegister";
+            btnGoToRegister.Size = new Size(270, 40);
+            btnGoToRegister.TabIndex = 7;
+            btnGoToRegister.Text = "Belum punya akun? Daftar disini";
+            btnGoToRegister.UseVisualStyleBackColor = false;
+            btnGoToRegister.Click += btnGoToRegister_Click;
             // 
             // btnLogin
             // 
-            this.btnLogin.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(52)))), ((int)(((byte)(152)))), ((int)(((byte)(219)))));
-            this.btnLogin.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnLogin.FlatAppearance.BorderSize = 0;
-            this.btnLogin.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnLogin.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold);
-            this.btnLogin.ForeColor = System.Drawing.Color.White;
-            this.btnLogin.Location = new System.Drawing.Point(40, 270);
-            this.btnLogin.Name = "btnLogin";
-            this.btnLogin.Size = new System.Drawing.Size(270, 45);
-            this.btnLogin.TabIndex = 6;
-            this.btnLogin.Text = "LOGIN";
-            this.btnLogin.UseVisualStyleBackColor = false;
-            this.btnLogin.Click += new System.EventHandler(this.btnLogin_Click);
+            btnLogin.BackColor = Color.FromArgb(52, 152, 219);
+            btnLogin.Cursor = Cursors.Hand;
+            btnLogin.FlatAppearance.BorderSize = 0;
+            btnLogin.FlatStyle = FlatStyle.Flat;
+            btnLogin.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
+            btnLogin.ForeColor = Color.White;
+            btnLogin.Location = new Point(40, 270);
+            btnLogin.Name = "btnLogin";
+            btnLogin.Size = new Size(270, 45);
+            btnLogin.TabIndex = 6;
+            btnLogin.Text = "LOGIN";
+            btnLogin.UseVisualStyleBackColor = false;
+            btnLogin.Click += btnLogin_Click;
             // 
             // txtPassword
             // 
-            this.txtPassword.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.txtPassword.Font = new System.Drawing.Font("Segoe UI", 11F);
-            this.txtPassword.Location = new System.Drawing.Point(40, 215);
-            this.txtPassword.Name = "txtPassword";
-            this.txtPassword.Size = new System.Drawing.Size(270, 32);
-            this.txtPassword.TabIndex = 5;
-            this.txtPassword.UseSystemPasswordChar = true;
+            txtPassword.BorderStyle = BorderStyle.FixedSingle;
+            txtPassword.Font = new Font("Segoe UI", 11F);
+            txtPassword.Location = new Point(40, 215);
+            txtPassword.Name = "txtPassword";
+            txtPassword.Size = new Size(270, 32);
+            txtPassword.TabIndex = 5;
+            txtPassword.UseSystemPasswordChar = true;
             // 
             // lblPass
             // 
-            this.lblPass.AutoSize = true;
-            this.lblPass.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.lblPass.ForeColor = System.Drawing.Color.Gray;
-            this.lblPass.Location = new System.Drawing.Point(40, 190);
-            this.lblPass.Name = "lblPass";
-            this.lblPass.Size = new System.Drawing.Size(70, 20);
-            this.lblPass.TabIndex = 4;
-            this.lblPass.Text = "Password";
+            lblPass.AutoSize = true;
+            lblPass.Font = new Font("Segoe UI", 9F);
+            lblPass.ForeColor = Color.Gray;
+            lblPass.Location = new Point(40, 190);
+            lblPass.Name = "lblPass";
+            lblPass.Size = new Size(70, 20);
+            lblPass.TabIndex = 4;
+            lblPass.Text = "Password";
             // 
             // txtEmail
             // 
-            this.txtEmail.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.txtEmail.Font = new System.Drawing.Font("Segoe UI", 11F);
-            this.txtEmail.Location = new System.Drawing.Point(40, 145);
-            this.txtEmail.Name = "txtEmail";
-            this.txtEmail.Size = new System.Drawing.Size(270, 32);
-            this.txtEmail.TabIndex = 3;
+            txtEmail.BorderStyle = BorderStyle.FixedSingle;
+            txtEmail.Font = new Font("Segoe UI", 11F);
+            txtEmail.Location = new Point(40, 145);
+            txtEmail.Name = "txtEmail";
+            txtEmail.Size = new Size(270, 32);
+            txtEmail.TabIndex = 3;
             // 
             // lblEmail
             // 
-            this.lblEmail.AutoSize = true;
-            this.lblEmail.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.lblEmail.ForeColor = System.Drawing.Color.Gray;
-            this.lblEmail.Location = new System.Drawing.Point(40, 120);
-            this.lblEmail.Name = "lblEmail";
-            this.lblEmail.Size = new System.Drawing.Size(46, 20);
-            this.lblEmail.TabIndex = 2;
-            this.lblEmail.Text = "Email";
+            lblEmail.AutoSize = true;
+            lblEmail.Font = new Font("Segoe UI", 9F);
+            lblEmail.ForeColor = Color.Gray;
+            lblEmail.Location = new Point(40, 120);
+            lblEmail.Name = "lblEmail";
+            lblEmail.Size = new Size(46, 20);
+            lblEmail.TabIndex = 2;
+            lblEmail.Text = "Email";
             // 
             // lblSubtitle
             // 
-            this.lblSubtitle.AutoSize = true;
-            this.lblSubtitle.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.lblSubtitle.ForeColor = System.Drawing.Color.Gray;
-            this.lblSubtitle.Location = new System.Drawing.Point(70, 75);
-            this.lblSubtitle.Name = "lblSubtitle";
-            this.lblSubtitle.Size = new System.Drawing.Size(207, 20);
-            this.lblSubtitle.TabIndex = 1;
-            this.lblSubtitle.Text = "Masukkan email dan password";
+            lblSubtitle.AutoSize = true;
+            lblSubtitle.Font = new Font("Segoe UI", 9F);
+            lblSubtitle.ForeColor = Color.Gray;
+            lblSubtitle.Location = new Point(70, 75);
+            lblSubtitle.Name = "lblSubtitle";
+            lblSubtitle.Size = new Size(211, 20);
+            lblSubtitle.TabIndex = 1;
+            lblSubtitle.Text = "Masukkan email dan password";
             // 
             // lblTitle
             // 
-            this.lblTitle.AutoSize = true;
-            this.lblTitle.Font = new System.Drawing.Font("Segoe UI", 22F, System.Drawing.FontStyle.Bold);
-            this.lblTitle.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(52)))), ((int)(((byte)(73)))), ((int)(((byte)(94)))));
-            this.lblTitle.Location = new System.Drawing.Point(70, 40);
-            this.lblTitle.Name = "lblTitle";
-            this.lblTitle.Size = new System.Drawing.Size(238, 50);
-            this.lblTitle.TabIndex = 0;
-            this.lblTitle.Text = "HarborMaster";
+            lblTitle.AutoSize = true;
+            lblTitle.Font = new Font("Segoe UI", 22F, FontStyle.Bold);
+            lblTitle.ForeColor = Color.FromArgb(52, 73, 94);
+            lblTitle.Location = new Point(44, 25);
+            lblTitle.Name = "lblTitle";
+            lblTitle.Size = new Size(266, 50);
+            lblTitle.TabIndex = 0;
+            lblTitle.Text = "HarborMaster";
             // 
             // panelTitleBar
             // 
-            this.panelTitleBar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(89)))), ((int)(((byte)(171)))), ((int)(((byte)(227)))));
-            this.panelTitleBar.Controls.Add(this.btnClose);
-            this.panelTitleBar.Controls.Add(this.btnMaximize);
-            this.panelTitleBar.Controls.Add(this.btnMinimize);
-            this.panelTitleBar.Controls.Add(this.lblTitleBar);
-            this.panelTitleBar.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelTitleBar.Location = new System.Drawing.Point(0, 0);
-            this.panelTitleBar.Name = "panelTitleBar";
-            this.panelTitleBar.Size = new System.Drawing.Size(900, 40);
-            this.panelTitleBar.TabIndex = 1;
-            this.panelTitleBar.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panelTitleBar_MouseDown);
+            panelTitleBar.BackColor = Color.FromArgb(89, 171, 227);
+            panelTitleBar.Controls.Add(btnClose);
+            panelTitleBar.Controls.Add(btnMaximize);
+            panelTitleBar.Controls.Add(btnMinimize);
+            panelTitleBar.Controls.Add(lblTitleBar);
+            panelTitleBar.Dock = DockStyle.Top;
+            panelTitleBar.Location = new Point(0, 0);
+            panelTitleBar.Name = "panelTitleBar";
+            panelTitleBar.Size = new Size(900, 40);
+            panelTitleBar.TabIndex = 1;
+            panelTitleBar.MouseDown += panelTitleBar_MouseDown;
             // 
             // btnClose
             // 
-            this.btnClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnClose.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(76)))), ((int)(((byte)(60)))));
-            this.btnClose.FlatAppearance.BorderSize = 0;
-            this.btnClose.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnClose.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
-            this.btnClose.ForeColor = System.Drawing.Color.White;
-            this.btnClose.Location = new System.Drawing.Point(860, 0);
-            this.btnClose.Name = "btnClose";
-            this.btnClose.Size = new System.Drawing.Size(40, 40);
-            this.btnClose.TabIndex = 3;
-            this.btnClose.Text = "✕";
-            this.btnClose.UseVisualStyleBackColor = false;
-            this.btnClose.Click += new System.EventHandler(this.btnClose_Click);
+            btnClose.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            btnClose.BackColor = Color.FromArgb(231, 76, 60);
+            btnClose.FlatAppearance.BorderSize = 0;
+            btnClose.FlatStyle = FlatStyle.Flat;
+            btnClose.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            btnClose.ForeColor = Color.White;
+            btnClose.Location = new Point(860, 0);
+            btnClose.Name = "btnClose";
+            btnClose.Size = new Size(40, 40);
+            btnClose.TabIndex = 3;
+            btnClose.Text = "✕";
+            btnClose.UseVisualStyleBackColor = false;
+            btnClose.Click += btnClose_Click;
             // 
             // btnMaximize
             // 
-            this.btnMaximize.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnMaximize.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(52)))), ((int)(((byte)(152)))), ((int)(((byte)(219)))));
-            this.btnMaximize.FlatAppearance.BorderSize = 0;
-            this.btnMaximize.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnMaximize.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
-            this.btnMaximize.ForeColor = System.Drawing.Color.White;
-            this.btnMaximize.Location = new System.Drawing.Point(820, 0);
-            this.btnMaximize.Name = "btnMaximize";
-            this.btnMaximize.Size = new System.Drawing.Size(40, 40);
-            this.btnMaximize.TabIndex = 2;
-            this.btnMaximize.Text = "□";
-            this.btnMaximize.UseVisualStyleBackColor = false;
-            this.btnMaximize.Click += new System.EventHandler(this.btnMaximize_Click);
+            btnMaximize.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            btnMaximize.BackColor = Color.FromArgb(52, 152, 219);
+            btnMaximize.FlatAppearance.BorderSize = 0;
+            btnMaximize.FlatStyle = FlatStyle.Flat;
+            btnMaximize.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            btnMaximize.ForeColor = Color.White;
+            btnMaximize.Location = new Point(820, 0);
+            btnMaximize.Name = "btnMaximize";
+            btnMaximize.Size = new Size(40, 40);
+            btnMaximize.TabIndex = 2;
+            btnMaximize.Text = "□";
+            btnMaximize.UseVisualStyleBackColor = false;
+            btnMaximize.Click += btnMaximize_Click;
             // 
             // btnMinimize
             // 
-            this.btnMinimize.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnMinimize.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(52)))), ((int)(((byte)(152)))), ((int)(((byte)(219)))));
-            this.btnMinimize.FlatAppearance.BorderSize = 0;
-            this.btnMinimize.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnMinimize.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
-            this.btnMinimize.ForeColor = System.Drawing.Color.White;
-            this.btnMinimize.Location = new System.Drawing.Point(780, 0);
-            this.btnMinimize.Name = "btnMinimize";
-            this.btnMinimize.Size = new System.Drawing.Size(40, 40);
-            this.btnMinimize.TabIndex = 1;
-            this.btnMinimize.Text = "─";
-            this.btnMinimize.UseVisualStyleBackColor = false;
-            this.btnMinimize.Click += new System.EventHandler(this.btnMinimize_Click);
+            btnMinimize.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            btnMinimize.BackColor = Color.FromArgb(52, 152, 219);
+            btnMinimize.FlatAppearance.BorderSize = 0;
+            btnMinimize.FlatStyle = FlatStyle.Flat;
+            btnMinimize.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            btnMinimize.ForeColor = Color.White;
+            btnMinimize.Location = new Point(780, 0);
+            btnMinimize.Name = "btnMinimize";
+            btnMinimize.Size = new Size(40, 40);
+            btnMinimize.TabIndex = 1;
+            btnMinimize.Text = "─";
+            btnMinimize.UseVisualStyleBackColor = false;
+            btnMinimize.Click += btnMinimize_Click;
             // 
             // lblTitleBar
             // 
-            this.lblTitleBar.AutoSize = true;
-            this.lblTitleBar.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
-            this.lblTitleBar.ForeColor = System.Drawing.Color.White;
-            this.lblTitleBar.Location = new System.Drawing.Point(10, 10);
-            this.lblTitleBar.Name = "lblTitleBar";
-            this.lblTitleBar.Size = new System.Drawing.Size(147, 23);
-            this.lblTitleBar.TabIndex = 0;
-            this.lblTitleBar.Text = "Login - HarborMaster";
+            lblTitleBar.AutoSize = true;
+            lblTitleBar.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            lblTitleBar.ForeColor = Color.White;
+            lblTitleBar.Location = new Point(10, 10);
+            lblTitleBar.Name = "lblTitleBar";
+            lblTitleBar.Size = new Size(184, 23);
+            lblTitleBar.TabIndex = 0;
+            lblTitleBar.Text = "Login - HarborMaster";
             // 
             // LoginWindow
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(89)))), ((int)(((byte)(171)))), ((int)(((byte)(227)))));
-            this.ClientSize = new System.Drawing.Size(900, 600);
-            this.Controls.Add(this.panelTitleBar);
-            this.Controls.Add(this.panelLogin);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
-            this.MinimumSize = new System.Drawing.Size(900, 600);
-            this.Name = "LoginWindow";
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "LoginWindow";
-            this.panelLogin.ResumeLayout(false);
-            this.panelLogin.PerformLayout();
-            this.panelTitleBar.ResumeLayout(false);
-            this.panelTitleBar.PerformLayout();
-            this.ResumeLayout(false);
+            AutoScaleDimensions = new SizeF(8F, 20F);
+            AutoScaleMode = AutoScaleMode.Font;
+            BackColor = Color.FromArgb(89, 171, 227);
+            ClientSize = new Size(900, 600);
+            Controls.Add(panelTitleBar);
+            Controls.Add(panelLogin);
+            FormBorderStyle = FormBorderStyle.None;
+            MinimumSize = new Size(900, 600);
+            Name = "LoginWindow";
+            StartPosition = FormStartPosition.CenterScreen;
+            Text = "LoginWindow";
+            panelLogin.ResumeLayout(false);
+            panelLogin.PerformLayout();
+            panelTitleBar.ResumeLayout(false);
+            panelTitleBar.PerformLayout();
+            ResumeLayout(false);
         }
 
         #endregion

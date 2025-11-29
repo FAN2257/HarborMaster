@@ -29,9 +29,6 @@ namespace HarborMaster.Models
         [Column("password_hash")]
         public string? PasswordHash { get; set; }
 
-        [Column("email")]
-        public string? Email { get; set; }
-
         [Column("phone")]
         public string? Phone { get; set; }
 

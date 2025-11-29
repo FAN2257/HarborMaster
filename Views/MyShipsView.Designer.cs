@@ -30,10 +30,21 @@ namespace HarborMaster.Views
         {
             this.components = new System.ComponentModel.Container();
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Text = "MyShipsView";
+            this.ClientSize = new System.Drawing.Size(1050, 600);
+            this.Text = "My Ships";
         }
 
         #endregion
+
+        // UI Controls - Declared here for partial class
+        private System.Windows.Forms.Panel panelHeader;
+        private System.Windows.Forms.Label lblTitle;
+        private System.Windows.Forms.Button btnViewDetails;  // NEW - READ
+        private System.Windows.Forms.Button btnEdit;
+        private System.Windows.Forms.Button btnDelete;      // NEW - DELETE
+        private System.Windows.Forms.Button btnClose;
+        private System.Windows.Forms.Button btnRefresh;
+        private System.Windows.Forms.DataGridView dgvShips;
+        private System.Windows.Forms.Label lblLoading;
     }
 }

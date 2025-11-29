@@ -28,6 +28,9 @@ namespace HarborMaster.Views
 
             // 3. Buat instance Presenter
             _presenter = new LoginPresenter(this);
+
+            // 4. Subscribe to resize event to keep form centered
+            this.Resize += LoginWindow_Resize;
         }
 
         // --- Implementasi Interface ILoginView ---
@@ -119,6 +122,46 @@ namespace HarborMaster.Views
                 ReleaseCapture();
                 SendMessage(Handle, WM_NCLBUTTONDOWN, HT_CAPTION, 0);
             }
+        }
+
+        // Keep form centered when resizing/maximizing
+        private void LoginWindow_Resize(object sender, EventArgs e)
+        {
+            if (this.WindowState == FormWindowState.Maximized)
+            {
+                // Center the panel when maximized
+                CenterPanel();
+            }
+            else if (this.WindowState == FormWindowState.Normal)
+            {
+                // Reset to original position when restored
+                ResetPanelPosition();
+            }
+        }
+
+        private void CenterPanel()
+        {
+            // Center panelLogin in the form
+            if (panelLogin != null)
+            {
+                panelLogin.Left = (this.ClientSize.Width - panelLogin.Width) / 2;
+                panelLogin.Top = (this.ClientSize.Height - panelLogin.Height) / 2 + 20; // +20 for title bar
+            }
+        }
+
+        private void ResetPanelPosition()
+        {
+            // Reset to original designer position
+            if (panelLogin != null)
+            {
+                panelLogin.Left = 300;  // Original X from Designer
+                panelLogin.Top = 165;   // Original Y from Designer
+            }
+        }
+
+        private void panelLogin_Paint(object sender, PaintEventArgs e)
+        {
+
         }
     }
 }

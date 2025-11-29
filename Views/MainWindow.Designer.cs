@@ -237,7 +237,7 @@
             btnRefreshData.FlatStyle = FlatStyle.Flat;
             btnRefreshData.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             btnRefreshData.ForeColor = Color.White;
-            btnRefreshData.Location = new Point(1130, 20);
+            btnRefreshData.Location = new Point(1056, 20);
             btnRefreshData.Name = "btnRefreshData";
             btnRefreshData.Size = new Size(140, 40);
             btnRefreshData.TabIndex = 2;
@@ -448,8 +448,7 @@
             Controls.Add(cardSedangBerlabuh);
             Controls.Add(cardTotalKapal);
             Controls.Add(panelHeader);
-            FormBorderStyle = FormBorderStyle.FixedSingle;
-            MaximizeBox = false;
+            MinimumSize = new Size(1400, 700);
             Name = "MainWindow";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "HarborMaster - Dashboard";
@@ -470,7 +469,6 @@
 
         private System.Windows.Forms.Panel panelHeader;
         private System.Windows.Forms.Label lblTitle;
-        private System.Windows.Forms.Button btnAddShip;
         private System.Windows.Forms.Button btnRefreshData;
         private System.Windows.Forms.Button btnBack;
         private System.Windows.Forms.Button btnAddMyShip;
@@ -494,5 +492,6 @@
         private System.Windows.Forms.ComboBox comboShips;
         private System.Windows.Forms.DateTimePicker dtpETA;
         private System.Windows.Forms.DateTimePicker dtpETD;
+        private Button btnAddShip;
     }
 }

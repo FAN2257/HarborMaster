@@ -31,6 +31,9 @@ namespace HarborMaster.Views
 
             // 4. Populate Role ComboBox
             InitializeRoleComboBox();
+
+            // 5. Subscribe to resize event to keep form centered
+            this.Resize += RegisterWindow_Resize;
         }
 
         private void InitializeRoleComboBox()
@@ -160,6 +163,41 @@ namespace HarborMaster.Views
             {
                 ReleaseCapture();
                 SendMessage(Handle, WM_NCLBUTTONDOWN, HT_CAPTION, 0);
+            }
+        }
+
+        // Keep form centered when resizing/maximizing
+        private void RegisterWindow_Resize(object sender, EventArgs e)
+        {
+            if (this.WindowState == FormWindowState.Maximized)
+            {
+                // Center the panel when maximized
+                CenterPanel();
+            }
+            else if (this.WindowState == FormWindowState.Normal)
+            {
+                // Reset to original position when restored
+                ResetPanelPosition();
+            }
+        }
+
+        private void CenterPanel()
+        {
+            // Center panelRegister in the form
+            if (panelRegister != null)
+            {
+                panelRegister.Left = (this.ClientSize.Width - panelRegister.Width) / 2;
+                panelRegister.Top = (this.ClientSize.Height - panelRegister.Height) / 2 + 40; // +40 for title bar
+            }
+        }
+
+        private void ResetPanelPosition()
+        {
+            // Reset to original designer position
+            if (panelRegister != null)
+            {
+                panelRegister.Left = 50;  // Original X from Designer
+                panelRegister.Top = 90;   // Original Y from Designer
             }
         }
 
