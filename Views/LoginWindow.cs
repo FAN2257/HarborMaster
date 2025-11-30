@@ -35,7 +35,7 @@ namespace HarborMaster.Views
 
         // --- Implementasi Interface ILoginView ---
 
-        public string Username => txtEmail?.Text ?? ""; // Email used as username
+        public string Email => txtEmail?.Text ?? "";
         public string Password => txtPassword?.Text ?? "";
         public User? LoggedInUser { get; private set; }
 

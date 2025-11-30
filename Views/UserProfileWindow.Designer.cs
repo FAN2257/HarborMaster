@@ -215,7 +215,7 @@ namespace HarborMaster.Views
             this.lblUsername.Name = "lblUsername";
             this.lblUsername.Size = new System.Drawing.Size(63, 15);
             this.lblUsername.TabIndex = 0;
-            this.lblUsername.Text = "Username:";
+            this.lblUsername.Text = "Email:";
             //
             // tabPassword
             //

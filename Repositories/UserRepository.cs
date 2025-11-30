@@ -1,4 +1,4 @@
-﻿using HarborMaster.Models;
+using HarborMaster.Models;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -6,16 +6,7 @@ namespace HarborMaster.Repositories
 {
     public class UserRepository : BaseRepository<User, int>
     {
-        // Metode ini spesifik untuk User - Get by username (legacy)
-        public async Task<User> GetByUsername(string username)
-        {
-            var response = await _client.From<User>()
-                                        .Where(u => u.Username == username)
-                                        .Single();
-            return response;
-        }
-
-        // New method: Get by email (primary method for login)
+        // Get user by email (primary method for login)
         public async Task<User> GetByEmail(string email)
         {
             var response = await _client.From<User>()
@@ -25,7 +16,7 @@ namespace HarborMaster.Repositories
         }
 
         /// <summary>
-        /// Update user profile information (email, phone, company_name)
+        /// Update user profile (full name, email, phone, company name)
         /// </summary>
         public async Task UpdateProfile(int userId, string fullName, string? email, string? phone, string? companyName)
         {
@@ -46,12 +37,12 @@ namespace HarborMaster.Repositories
         /// <summary>
         /// Change user password
         /// </summary>
-        public async Task ChangePassword(int userId, string newPassword)
+        public async Task ChangePassword(int userId, string newPasswordHash)
         {
             var updateData = new User
             {
                 Id = userId,
-                PasswordHash = newPassword // Plain text for development
+                PasswordHash = newPasswordHash // Plain text for development
             };
 
             await _client.From<User>()

@@ -181,10 +181,9 @@ namespace HarborMaster.Services
                 if (user != null)
                 {
                     Console.WriteLine("[SUCCESS] User profile loaded");
-                    Console.WriteLine($"  Username: {user.Username}");
+                    Console.WriteLine($"  Email: {user.Email}");
                     Console.WriteLine($"  FullName: {user.FullName}");
                     Console.WriteLine($"  Role: {user.Role}");
-                    Console.WriteLine($"  Email: {user.Email ?? "(null)"}");
                     Console.WriteLine($"  Phone: {user.Phone ?? "(null)"}");
                     Console.WriteLine($"  Company: {user.CompanyName ?? "(null)"}");
                 }

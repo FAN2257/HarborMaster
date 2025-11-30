@@ -19,7 +19,7 @@ namespace HarborMaster.Presenters
             _currentUser = currentUser;
             _profileService = new UserProfileService();
 
-            Console.WriteLine($"[INFO] UserProfilePresenter initialized for user: {currentUser.Username} (ID: {currentUser.Id})");
+            Console.WriteLine($"[INFO] UserProfilePresenter initialized for user: {currentUser.Email} (ID: {currentUser.Id})");
         }
 
         /// <summary>
@@ -91,7 +91,7 @@ namespace HarborMaster.Presenters
                 string? phone = _view.Phone;
                 string? companyName = _view.CompanyName;
 
-                Console.WriteLine($"[INFO] Updating profile for user {_currentUser.Username}");
+                Console.WriteLine($"[INFO] Updating profile for user {_currentUser.Email}");
 
                 // Call service to update profile
                 string result = await _profileService.UpdateProfileAsync(
@@ -176,7 +176,7 @@ namespace HarborMaster.Presenters
                 string newPassword = _view.NewPassword;
                 string confirmPassword = _view.ConfirmPassword;
 
-                Console.WriteLine($"[INFO] Changing password for user {_currentUser.Username}");
+                Console.WriteLine($"[INFO] Changing password for user {_currentUser.Email}");
 
                 // Call service to change password
                 string result = await _profileService.ChangePasswordAsync(

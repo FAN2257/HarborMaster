@@ -50,7 +50,6 @@ namespace HarborMaster.Services
             // 5. Buat objek User baru
             User newUser = new User
             {
-                Username = email, // Username same as email for now
                 Email = email,
                 // Simpan password mentah (plain text)
                 PasswordHash = password, // <-- Gunakan password langsung

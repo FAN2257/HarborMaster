@@ -4,7 +4,7 @@ namespace HarborMaster.Views.Interfaces
 {
     public interface ILoginView
     {
-        string Username { get; }
+        string Email { get; }
         string Password { get; }
         string ErrorMessage { set; }
         bool IsLoading { set; }

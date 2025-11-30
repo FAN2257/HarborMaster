@@ -26,7 +26,7 @@ namespace HarborMaster.Presenters
             try
             {
                 // 1. Ambil input dari View
-                string email = _view.Username; // Email field mapped to Username property
+                string email = _view.Email;
                 string password = _view.Password;
                 string confirm = _view.ConfirmPassword;
                 string fullName = _view.FullName;

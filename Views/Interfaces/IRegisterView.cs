@@ -5,7 +5,7 @@ namespace HarborMaster.Views.Interfaces
     public interface IRegisterView
     {
         // Properti 'get' untuk input
-        string Username { get; } // Email will be mapped here
+        string Email { get; }
         string Password { get; }
         string ConfirmPassword { get; }
         string FullName { get; }

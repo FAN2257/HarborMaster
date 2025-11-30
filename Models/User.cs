@@ -10,15 +10,12 @@ namespace HarborMaster.Models
     public class User : BaseModel
     {
         // ? FIX: Set shouldInsert = false untuk auto-increment field
-        [PrimaryKey("id", shouldInsert: false)] 
+        [PrimaryKey("id", shouldInsert: false)]
         public int Id { get; set; }
 
-        [Column("username")]
-        public string Username { get; set; }
-        
         [Column("email")]
         public string Email { get; set; }
-        
+
         [Column("full_name")]
         public string FullName { get; set; }
 
@@ -27,13 +24,16 @@ namespace HarborMaster.Models
         public UserRole Role { get; set; }
 
         [Column("password_hash")]
-        public string? PasswordHash { get; set; }
+        public string PasswordHash { get; set; }
 
         [Column("phone")]
         public string? Phone { get; set; }
 
         [Column("company_name")]
         public string? CompanyName { get; set; }
+
+        // Computed property for UI display - extracts first name
+        public string FirstName => FullName?.Split(' ').FirstOrDefault() ?? "User";
 
         public bool CanOverrideAllocation()
         {

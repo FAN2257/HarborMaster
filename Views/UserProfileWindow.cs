@@ -73,7 +73,7 @@ namespace HarborMaster.Views
         // Interface methods
         public void LoadUserData(User user)
         {
-            txtUsername.Text = user.Username;
+            txtUsername.Text = user.Email;
             txtRole.Text = user.Role.ToString();
             txtFullName.Text = user.FullName;
             txtEmail.Text = user.Email ?? string.Empty;

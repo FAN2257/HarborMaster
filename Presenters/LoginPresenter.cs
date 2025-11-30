@@ -32,11 +32,11 @@ namespace HarborMaster.Presenters
             try
             {
                 // 1. Ambil input dari View (melalui interface)
-                string username = _view.Username;
+                string email = _view.Email;
                 string password = _view.Password;
 
                 // 2. Panggil Service untuk validasi (nullable return)
-                User? user = await _authService.ValidateUser(username, password);
+                User? user = await _authService.ValidateUser(email, password);
 
                 if (user != null)
                 {
@@ -47,7 +47,7 @@ namespace HarborMaster.Presenters
                 else
                 {
                     // 4. Gagal. Beri tahu View untuk menampilkan error
-                    _view.ErrorMessage = "Username atau Password salah.";
+                    _view.ErrorMessage = "Email atau Password salah.";
                 }
             }
             catch (System.Exception ex)

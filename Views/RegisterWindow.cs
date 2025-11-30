@@ -56,7 +56,7 @@ namespace HarborMaster.Views
         }
 
         // --- Implementasi Interface IRegisterView ---
-        public string Username => txtEmail.Text; // Email digunakan sebagai Username
+        public string Email => txtEmail.Text;
         public string Password => txtPassword.Text;
         public string ConfirmPassword => txtConfirmPassword.Text;
         public string FullName => txtFullName.Text;
