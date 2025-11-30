@@ -51,6 +51,7 @@
             // 
             panelLogin.BackColor = Color.White;
             panelLogin.Controls.Add(lblError);
+            panelLogin.Controls.Add(lnkForgotPassword);
             panelLogin.Controls.Add(btnGoToRegister);
             panelLogin.Controls.Add(btnLogin);
             panelLogin.Controls.Add(txtPassword);
@@ -62,7 +63,7 @@
             panelLogin.CornerRadius = 15;
             panelLogin.Location = new Point(300, 165);
             panelLogin.Name = "panelLogin";
-            panelLogin.Size = new Size(350, 420);
+            panelLogin.Size = new Size(350, 460);
             panelLogin.TabIndex = 0;
             panelLogin.Paint += panelLogin_Paint;
             // 
@@ -71,11 +72,25 @@
             lblError.AutoSize = true;
             lblError.Font = new Font("Segoe UI", 8F);
             lblError.ForeColor = Color.Red;
-            lblError.Location = new Point(40, 375);
+            lblError.Location = new Point(40, 415);
             lblError.MaximumSize = new Size(270, 0);
             lblError.Name = "lblError";
             lblError.Size = new Size(0, 19);
             lblError.TabIndex = 8;
+            // 
+            // lnkForgotPassword
+            // 
+            lnkForgotPassword = new LinkLabel();
+            lnkForgotPassword.AutoSize = true;
+            lnkForgotPassword.Font = new Font("Segoe UI", 9F);
+            lnkForgotPassword.LinkColor = Color.FromArgb(52, 152, 219);
+            lnkForgotPassword.Location = new Point(195, 250);
+            lnkForgotPassword.Name = "lnkForgotPassword";
+            lnkForgotPassword.Size = new Size(115, 20);
+            lnkForgotPassword.TabIndex = 9;
+            lnkForgotPassword.TabStop = true;
+            lnkForgotPassword.Text = "Lupa Password?";
+            lnkForgotPassword.LinkClicked += lnkForgotPassword_LinkClicked;
             // 
             // btnGoToRegister
             // 
@@ -85,7 +100,7 @@
             btnGoToRegister.FlatStyle = FlatStyle.Flat;
             btnGoToRegister.Font = new Font("Segoe UI", 10F);
             btnGoToRegister.ForeColor = Color.White;
-            btnGoToRegister.Location = new Point(40, 325);
+            btnGoToRegister.Location = new Point(40, 365);
             btnGoToRegister.Name = "btnGoToRegister";
             btnGoToRegister.Size = new Size(270, 40);
             btnGoToRegister.TabIndex = 7;
@@ -101,7 +116,7 @@
             btnLogin.FlatStyle = FlatStyle.Flat;
             btnLogin.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
             btnLogin.ForeColor = Color.White;
-            btnLogin.Location = new Point(40, 270);
+            btnLogin.Location = new Point(40, 295);
             btnLogin.Name = "btnLogin";
             btnLogin.Size = new Size(270, 45);
             btnLogin.TabIndex = 6;
@@ -182,7 +197,7 @@
             panelTitleBar.Dock = DockStyle.Top;
             panelTitleBar.Location = new Point(0, 0);
             panelTitleBar.Name = "panelTitleBar";
-            panelTitleBar.Size = new Size(900, 40);
+            panelTitleBar.Size = new Size(989, 40);
             panelTitleBar.TabIndex = 1;
             panelTitleBar.MouseDown += panelTitleBar_MouseDown;
             // 
@@ -194,7 +209,7 @@
             btnClose.FlatStyle = FlatStyle.Flat;
             btnClose.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             btnClose.ForeColor = Color.White;
-            btnClose.Location = new Point(860, 0);
+            btnClose.Location = new Point(949, 0);
             btnClose.Name = "btnClose";
             btnClose.Size = new Size(40, 40);
             btnClose.TabIndex = 3;
@@ -210,7 +225,7 @@
             btnMaximize.FlatStyle = FlatStyle.Flat;
             btnMaximize.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             btnMaximize.ForeColor = Color.White;
-            btnMaximize.Location = new Point(820, 0);
+            btnMaximize.Location = new Point(909, 0);
             btnMaximize.Name = "btnMaximize";
             btnMaximize.Size = new Size(40, 40);
             btnMaximize.TabIndex = 2;
@@ -226,7 +241,7 @@
             btnMinimize.FlatStyle = FlatStyle.Flat;
             btnMinimize.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             btnMinimize.ForeColor = Color.White;
-            btnMinimize.Location = new Point(780, 0);
+            btnMinimize.Location = new Point(869, 0);
             btnMinimize.Name = "btnMinimize";
             btnMinimize.Size = new Size(40, 40);
             btnMinimize.TabIndex = 1;
@@ -250,7 +265,7 @@
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(89, 171, 227);
-            ClientSize = new Size(900, 600);
+            ClientSize = new Size(989, 677);
             Controls.Add(panelTitleBar);
             Controls.Add(panelLogin);
             FormBorderStyle = FormBorderStyle.None;
@@ -277,6 +292,7 @@
         private System.Windows.Forms.Button btnGoToRegister;
         private System.Windows.Forms.Label lblError;
         private System.Windows.Forms.Label lblSubtitle;
+        private System.Windows.Forms.LinkLabel lnkForgotPassword;
         private System.Windows.Forms.Panel panelTitleBar;
         private System.Windows.Forms.Label lblTitleBar;
         private System.Windows.Forms.Button btnMinimize;
