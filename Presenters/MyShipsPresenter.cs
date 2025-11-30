@@ -16,12 +16,14 @@ namespace HarborMaster.Presenters
         private readonly IMyShipsView _view;
         private readonly ShipRepository _shipRepo;
         private readonly User _currentUser;
+        private List<Ship> _allMyShips; // Cache for filtering
 
         public MyShipsPresenter(IMyShipsView view, User currentUser)
         {
             _view = view;
             _currentUser = currentUser;
             _shipRepo = new ShipRepository();
+            _allMyShips = new List<Ship>();
         }
 
         /// <summary>
@@ -36,12 +38,13 @@ namespace HarborMaster.Presenters
                 // Get all ships
                 var allShips = await _shipRepo.GetAllAsync();
 
-                // Filter ships owned by current user
-                var myShips = allShips.FindAll(s => s.OwnerId == _currentUser.Id);
+                // Filter ships owned by current user and cache
+                _allMyShips = allShips.FindAll(s => s.OwnerId == _currentUser.Id);
 
-                _view.SetShipsDataSource(myShips);
+                // Apply search and filter
+                ApplySearchAndFilter();
 
-                if (myShips.Count == 0)
+                if (_allMyShips.Count == 0)
                 {
                     _view.ShowMessage("Anda belum memiliki kapal terdaftar.");
                 }
@@ -53,6 +56,45 @@ namespace HarborMaster.Presenters
             finally
             {
                 _view.IsLoading = false;
+            }
+        }
+
+        /// <summary>
+        /// Apply search and filter to ships list
+        /// Called when user types in search box or changes filter
+        /// </summary>
+        public void ApplySearchAndFilter()
+        {
+            try
+            {
+                var searchTerm = _view.SearchTerm?.Trim().ToLower() ?? "";
+                var selectedType = _view.SelectedShipType;
+
+                // Start with all ships
+                var filteredShips = new List<Ship>(_allMyShips);
+
+                // Apply search term (ship name or IMO number)
+                if (!string.IsNullOrWhiteSpace(searchTerm))
+                {
+                    filteredShips = filteredShips.FindAll(s =>
+                        s.Name.ToLower().Contains(searchTerm) ||
+                        s.ImoNumber.ToLower().Contains(searchTerm)
+                    );
+                }
+
+                // Apply ship type filter
+                if (!string.IsNullOrWhiteSpace(selectedType) && selectedType != "All Types")
+                {
+                    filteredShips = filteredShips.FindAll(s => s.ShipType == selectedType);
+                }
+
+                // Update view with filtered results
+                _view.SetShipsDataSource(filteredShips);
+                _view.UpdateResultCount(filteredShips.Count, _allMyShips.Count);
+            }
+            catch (Exception ex)
+            {
+                _view.ShowError($"Error filtering ships: {ex.Message}");
             }
         }
 

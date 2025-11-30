@@ -30,6 +30,21 @@ namespace HarborMaster.Views.Interfaces
         bool IsLoading { get; set; }
 
         /// <summary>
+        /// Get search term from search box
+        /// </summary>
+        string SearchTerm { get; }
+
+        /// <summary>
+        /// Get selected ship type filter
+        /// </summary>
+        string SelectedShipType { get; }
+
+        /// <summary>
+        /// Update result count display
+        /// </summary>
+        void UpdateResultCount(int visibleCount, int totalCount);
+
+        /// <summary>
         /// Close the view
         /// </summary>
         void CloseView();

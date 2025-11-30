@@ -17,6 +17,14 @@ namespace HarborMaster.Views
         private readonly MyShipsPresenter _presenter;
         private readonly User _currentUser;
 
+        // Search & Filter UI Controls
+        private Panel panelSearchFilter;
+        private TextBox txtSearch;
+        private Button btnClearSearch;
+        private ComboBox cboShipType;
+        private Label lblResultCount;
+        private System.Windows.Forms.Timer searchDebounceTimer;
+
         public MyShipsView(User currentUser)
         {
             InitializeComponent();
@@ -89,6 +97,22 @@ namespace HarborMaster.Views
         public void CloseView()
         {
             this.Close();
+        }
+
+        // Search & Filter Interface Properties
+        public string SearchTerm => txtSearch?.Text ?? "";
+
+        public string SelectedShipType => cboShipType?.SelectedItem?.ToString() ?? "All Types";
+
+        public void UpdateResultCount(int visibleCount, int totalCount)
+        {
+            if (lblResultCount != null)
+            {
+                lblResultCount.Text = $"Showing {visibleCount} of {totalCount} ships";
+                lblResultCount.ForeColor = visibleCount < totalCount
+                    ? Color.FromArgb(52, 152, 219)  // Blue when filtered
+                    : Color.FromArgb(127, 140, 141); // Gray when showing all
+            }
         }
 
         // --- Event Handlers ---
@@ -249,6 +273,9 @@ namespace HarborMaster.Views
             this.FormBorderStyle = FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
 
+            // Initialize Search & Filter Panel
+            InitializeSearchFilterPanel();
+
             // Header Panel
             panelHeader = new Panel();
             panelHeader.Dock = DockStyle.Top;
@@ -337,10 +364,10 @@ namespace HarborMaster.Views
             panelHeader.Controls.Add(btnRefresh);
             panelHeader.Controls.Add(btnClose);
 
-            // DataGridView - EXPANDED WIDTH
+            // DataGridView - EXPANDED WIDTH with adjusted position for search panel
             dgvShips = new DataGridView();
-            dgvShips.Location = new Point(20, 100);
-            dgvShips.Size = new Size(1010, 480);
+            dgvShips.Location = new Point(20, 160);
+            dgvShips.Size = new Size(1010, 420);
             dgvShips.BackgroundColor = Color.White;
             dgvShips.BorderStyle = BorderStyle.None;
             dgvShips.AllowUserToAddRows = false;
@@ -377,8 +404,149 @@ namespace HarborMaster.Views
 
             // Add controls to form
             this.Controls.Add(panelHeader);
+            this.Controls.Add(panelSearchFilter);
             this.Controls.Add(dgvShips);
             this.Controls.Add(lblLoading);
+        }
+
+        /// <summary>
+        /// Initialize Search & Filter Panel with all controls
+        /// </summary>
+        private void InitializeSearchFilterPanel()
+        {
+            // Main Search & Filter Panel
+            panelSearchFilter = new Panel();
+            panelSearchFilter.Location = new Point(20, 90);
+            panelSearchFilter.Size = new Size(1010, 60);
+            panelSearchFilter.BackColor = Color.White;
+            panelSearchFilter.BorderStyle = BorderStyle.FixedSingle;
+
+            // Search Icon Label
+            Label lblSearchIcon = new Label();
+            lblSearchIcon.Text = "🔍";
+            lblSearchIcon.Font = new Font("Segoe UI", 14);
+            lblSearchIcon.Location = new Point(15, 18);
+            lblSearchIcon.Size = new Size(30, 25);
+            lblSearchIcon.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+
+            // Search TextBox
+            txtSearch = new TextBox();
+            txtSearch.Location = new Point(50, 18);
+            txtSearch.Size = new Size(350, 25);
+            txtSearch.Font = new Font("Segoe UI", 11);
+            txtSearch.PlaceholderText = "Search by ship name or IMO number...";
+            txtSearch.BorderStyle = BorderStyle.FixedSingle;
+            txtSearch.TextChanged += txtSearch_TextChanged;
+
+            // Clear Search Button
+            btnClearSearch = new Button();
+            btnClearSearch.Text = "✕";
+            btnClearSearch.Location = new Point(405, 17);
+            btnClearSearch.Size = new Size(30, 27);
+            btnClearSearch.FlatStyle = FlatStyle.Flat;
+            btnClearSearch.FlatAppearance.BorderSize = 0;
+            btnClearSearch.BackColor = Color.FromArgb(231, 76, 60); // Red
+            btnClearSearch.ForeColor = Color.White;
+            btnClearSearch.Font = new Font("Segoe UI", 10, FontStyle.Bold);
+            btnClearSearch.Cursor = Cursors.Hand;
+            btnClearSearch.Click += btnClearSearch_Click;
+            btnClearSearch.Visible = false; // Hidden until user types
+
+            // Filter Label
+            Label lblFilter = new Label();
+            lblFilter.Text = "Filter by Type:";
+            lblFilter.Font = new Font("Segoe UI", 10, FontStyle.Bold);
+            lblFilter.Location = new Point(460, 20);
+            lblFilter.Size = new Size(100, 20);
+            lblFilter.ForeColor = Color.FromArgb(52, 73, 94);
+
+            // Ship Type ComboBox
+            cboShipType = new ComboBox();
+            cboShipType.Location = new Point(565, 17);
+            cboShipType.Size = new Size(180, 25);
+            cboShipType.Font = new Font("Segoe UI", 10);
+            cboShipType.DropDownStyle = ComboBoxStyle.DropDownList;
+            cboShipType.FlatStyle = FlatStyle.Flat;
+            cboShipType.Items.AddRange(new object[] {
+                "All Types",
+                "Container",
+                "Bulk Carrier",
+                "Tanker",
+                "General Cargo",
+                "Passenger Ship",
+                "Fishing Vessel"
+            });
+            cboShipType.SelectedIndex = 0; // Default to "All Types"
+            cboShipType.SelectedIndexChanged += cboShipType_SelectedIndexChanged;
+
+            // Result Count Label
+            lblResultCount = new Label();
+            lblResultCount.Text = "Showing 0 of 0 ships";
+            lblResultCount.Font = new Font("Segoe UI", 9, FontStyle.Italic);
+            lblResultCount.Location = new Point(770, 20);
+            lblResultCount.Size = new Size(220, 20);
+            lblResultCount.ForeColor = Color.FromArgb(127, 140, 141);
+            lblResultCount.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+
+            // Search Debounce Timer (300ms delay)
+            searchDebounceTimer = new System.Windows.Forms.Timer();
+            searchDebounceTimer.Interval = 300;
+            searchDebounceTimer.Tick += searchDebounceTimer_Tick;
+
+            // Add controls to panel
+            panelSearchFilter.Controls.Add(lblSearchIcon);
+            panelSearchFilter.Controls.Add(txtSearch);
+            panelSearchFilter.Controls.Add(btnClearSearch);
+            panelSearchFilter.Controls.Add(lblFilter);
+            panelSearchFilter.Controls.Add(cboShipType);
+            panelSearchFilter.Controls.Add(lblResultCount);
+        }
+
+        // --- Search & Filter Event Handlers ---
+
+        /// <summary>
+        /// Handle search text changes with debouncing
+        /// </summary>
+        private void txtSearch_TextChanged(object sender, EventArgs e)
+        {
+            // Stop existing timer
+            searchDebounceTimer.Stop();
+
+            // Show/hide clear button
+            btnClearSearch.Visible = !string.IsNullOrWhiteSpace(txtSearch.Text);
+
+            // Start new timer (will trigger search after 300ms of no typing)
+            searchDebounceTimer.Start();
+        }
+
+        /// <summary>
+        /// Debounce timer tick - perform actual search
+        /// </summary>
+        private void searchDebounceTimer_Tick(object sender, EventArgs e)
+        {
+            // Stop timer
+            searchDebounceTimer.Stop();
+
+            // Perform search
+            _presenter.ApplySearchAndFilter();
+        }
+
+        /// <summary>
+        /// Clear search box
+        /// </summary>
+        private void btnClearSearch_Click(object sender, EventArgs e)
+        {
+            txtSearch.Clear();
+            txtSearch.Focus();
+        }
+
+        /// <summary>
+        /// Handle ship type filter changes
+        /// </summary>
+        private void cboShipType_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            // Apply filter immediately (no debounce needed)
+            _presenter.ApplySearchAndFilter();
         }
     }
 }
