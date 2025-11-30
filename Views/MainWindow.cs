@@ -175,8 +175,9 @@ namespace HarborMaster.Views
 
         private void btnMyRequests_Click(object sender, EventArgs e)
         {
-            MyRequestsView requestsView = new MyRequestsView(_currentUser);
-            requestsView.ShowDialog();
+            // Open Booking History View (enhanced with invoice and PDF export)
+            BookingHistoryView historyView = new BookingHistoryView(_currentUser);
+            historyView.ShowDialog();
         }
 
         // Operator specific event handlers

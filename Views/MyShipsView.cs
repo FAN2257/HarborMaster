@@ -134,6 +134,7 @@ namespace HarborMaster.Views
 
         /// <summary>
         /// VIEW DETAILS - Read operation (CRUD - R)
+        /// Opens ShipDetailView dialog with PDF export capability
         /// </summary>
         private void btnViewDetails_Click(object sender, EventArgs e)
         {
@@ -145,33 +146,10 @@ namespace HarborMaster.Views
 
             Ship selectedShip = (Ship)dgvShips.SelectedRows[0].DataBoundItem;
 
-            // Build detailed ship information
-            string details = "═══════════════════════════════════════════\n" +
-                           "              DETAIL INFORMASI KAPAL\n" +
-                           "═══════════════════════════════════════════\n\n" +
-                           $"📌 IDENTITAS KAPAL\n" +
-                           $"   Nama Kapal    : {selectedShip.Name}\n" +
-                           $"   IMO Number    : {selectedShip.ImoNumber}\n" +
-                           $"   Tipe Kapal    : {selectedShip.ShipType}\n\n" +
-                           $"📏 DIMENSI & SPESIFIKASI\n" +
-                           $"   Panjang       : {selectedShip.LengthOverall:N2} meter\n" +
-                           $"   Draft         : {selectedShip.Draft:N2} meter\n\n" +
-                           $"💰 BIAYA & PRIORITAS\n" +
-                           $"   Special Fee   : Rp {selectedShip.CalculateSpecialFee():N0}\n" +
-                           $"   Priority Level: {selectedShip.GetPriorityLevel()}/5\n" +
-                           $"   Max Docking   : {selectedShip.GetMaxDockingDuration()} hari\n\n" +
-                           $"✅ LAYANAN YANG DIBUTUHKAN:\n";
-
-            var services = selectedShip.GetRequiredServices();
-            foreach (var service in services)
-            {
-                details += $"   • {service}\n";
-            }
-
-            details += "\n═══════════════════════════════════════════";
-
-            MessageBox.Show(details, $"Detail Kapal - {selectedShip.Name}", 
-                MessageBoxButtons.OK, MessageBoxIcon.Information);
+            // Open ShipDetailView dialog
+            ShipDetailView detailView = new ShipDetailView();
+            detailView.SetShipDetails(selectedShip);
+            detailView.ShowDialog();
         }
 
         /// <summary>
