@@ -15,6 +15,10 @@ namespace HarborMaster.Models
         public int Id { get; set; }
         [Column("berth_assignment_id")]
         public int BerthAssignmentId { get; set; }
+
+        [Column("docking_request_id")]
+        public int DockingRequestId { get; set; }
+
         [Column("total_amount")]
         public decimal TotalAmount { get; set; }
         [Column("issued_date")]

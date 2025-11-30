@@ -1,4 +1,5 @@
 using HarborMaster.Models;
+using HarborMaster.Presenters;
 using System.Collections.Generic;
 
 namespace HarborMaster.Views.Interfaces
@@ -12,7 +13,7 @@ namespace HarborMaster.Views.Interfaces
         /// <summary>
         /// Set the list of berths to display
         /// </summary>
-        void SetBerthsDataSource(List<Berth> berths);
+        void SetBerthsDataSource(List<BerthStatusViewModel> berths);
 
         /// <summary>
         /// Show message to user

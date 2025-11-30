@@ -8,57 +8,58 @@ using System.Threading.Tasks;
 
 namespace HarborMaster.Presenters
 {
-    /// <summary>
-    /// Presenter for Booking History view (ShipOwner)
-    /// Handles loading and filtering docking requests for the current user
-    /// </summary>
     public class BookingHistoryPresenter
     {
         private readonly IBookingHistoryView _view;
         private readonly DockingRequestRepository _requestRepo;
+        private readonly InvoiceRepository _invoiceRepo; // Tambahan
         private readonly User _currentUser;
-        private List<DockingRequest> _allBookings; // Cache for filtering
+        private List<DockingRequest> _allBookings;
 
         public BookingHistoryPresenter(IBookingHistoryView view, User currentUser)
         {
             _view = view;
             _currentUser = currentUser;
             _requestRepo = new DockingRequestRepository();
+            _invoiceRepo = new InvoiceRepository(); // Tambahan
             _allBookings = new List<DockingRequest>();
         }
 
-        /// <summary>
-        /// Load all booking history for current user
-        /// </summary>
+        // Properti untuk mengecek role HarborMaster
+        public bool IsHarborMaster => _currentUser.Role == UserRole.HarborMaster;
+
         public async Task LoadBookingsAsync()
         {
             try
             {
                 _view.IsLoading = true;
 
-                // Get all docking requests
-                var allRequests = await _requestRepo.GetAllAsync();
+                // Logika Pembedaan Role
+                if (_currentUser.Role == UserRole.ShipOwner)
+                {
+                    // ShipOwner: Hanya melihat booking miliknya
+                    var shipRepo = new ShipRepository();
+                    var userShips = await shipRepo.GetShipsByOwnerIdAsync(_currentUser.Id);
+                    var userShipIds = userShips.Select(s => s.Id).ToList();
+                    
+                    var allRequests = await _requestRepo.GetAllAsync();
+                    _allBookings = allRequests
+                        .Where(r => userShipIds.Contains(r.ShipId))
+                        .OrderByDescending(r => r.CreatedAt)
+                        .ToList();
+                }
+                else // Operator & HarborMaster
+                {
+                    // Operator & HarborMaster: Melihat semua booking
+                    var allRequests = await _requestRepo.GetAllAsync();
+                    _allBookings = allRequests.OrderByDescending(r => r.CreatedAt).ToList();
+                }
 
-                // Get only requests for ships owned by current user
-                var shipRepo = new ShipRepository();
-                var userShips = await shipRepo.GetAllAsync();
-                var userShipIds = userShips
-                    .Where(s => s.OwnerId == _currentUser.Id)
-                    .Select(s => s.Id)
-                    .ToList();
-
-                // Filter requests for user's ships and cache
-                _allBookings = allRequests
-                    .Where(r => userShipIds.Contains(r.ShipId))
-                    .OrderByDescending(r => r.CreatedAt)
-                    .ToList();
-
-                // Apply search and filter
                 ApplySearchAndFilter();
 
                 if (_allBookings.Count == 0)
                 {
-                    _view.ShowMessage("Anda belum memiliki riwayat pemesanan docking.");
+                    _view.ShowMessage("Tidak ada riwayat pemesanan docking yang ditemukan.");
                 }
             }
             catch (Exception ex)
@@ -71,9 +72,6 @@ namespace HarborMaster.Presenters
             }
         }
 
-        /// <summary>
-        /// Apply search and filter to bookings list
-        /// </summary>
         public void ApplySearchAndFilter()
         {
             try
@@ -81,20 +79,16 @@ namespace HarborMaster.Presenters
                 var searchTerm = _view.SearchTerm?.Trim().ToLower() ?? "";
                 var selectedStatus = _view.SelectedStatus;
 
-                // Start with all bookings
                 var filteredBookings = new List<DockingRequest>(_allBookings);
 
-                // Apply search term (request ID or ship name)
                 if (!string.IsNullOrWhiteSpace(searchTerm))
                 {
-                    // Note: We need to join with Ship to search by ship name
-                    // For now, we'll just search by request ID
                     filteredBookings = filteredBookings
-                        .Where(r => r.Id.ToString().Contains(searchTerm))
+                        .Where(r => r.Id.ToString().Contains(searchTerm) || 
+                                   (r.Ship != null && r.Ship.Name.ToLower().Contains(searchTerm)))
                         .ToList();
                 }
 
-                // Apply status filter
                 if (!string.IsNullOrWhiteSpace(selectedStatus) && selectedStatus != "All Status")
                 {
                     filteredBookings = filteredBookings
@@ -102,13 +96,44 @@ namespace HarborMaster.Presenters
                         .ToList();
                 }
 
-                // Update view with filtered results
                 _view.SetBookingsDataSource(filteredBookings);
                 _view.UpdateResultCount(filteredBookings.Count, _allBookings.Count);
             }
             catch (Exception ex)
             {
                 _view.ShowError($"Error filtering bookings: {ex.Message}");
+            }
+        }
+        
+        // Method baru untuk update invoice
+        public async Task UpdateInvoiceAsync(int requestId, decimal newAmount, string notes)
+        {
+            try
+            {
+                _view.IsLoading = true;
+                var invoice = await _invoiceRepo.GetByDockingRequestId(requestId);
+                if (invoice == null)
+                {
+                    _view.ShowError("Invoice tidak ditemukan untuk permintaan ini.");
+                    return;
+                }
+
+                invoice.TotalAmount = newAmount;
+                invoice.Notes = string.IsNullOrWhiteSpace(notes) ? invoice.Notes : notes; // Update notes jika diisi
+
+                await _invoiceRepo.UpdateAsync(invoice);
+                _view.ShowMessage("Invoice berhasil diperbarui.");
+                
+                // Muat ulang data untuk menampilkan perubahan
+                await LoadBookingsAsync();
+            }
+            catch (Exception ex)
+            {
+                _view.ShowError($"Gagal memperbarui invoice: {ex.Message}");
+            }
+            finally
+            {
+                _view.IsLoading = false;
             }
         }
     }

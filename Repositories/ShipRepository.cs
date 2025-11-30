@@ -1,12 +1,17 @@
-﻿using HarborMaster.Models;
+using HarborMaster.Models;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace HarborMaster.Repositories
 {
-    // Untuk saat ini, ShipRepository tidak butuh metode khusus
-    // Semua fungsi (GetAll, GetById, Insert, dll) sudah ada di BaseRepository
     public class ShipRepository : BaseRepository<Ship, int>
     {
-        // Tambahkan metode kustom di sini jika perlu
-        // Contoh: public async Task<List<Ship>> GetShipsByFlag(string flag) { ... }
+        public async Task<List<Ship>> GetShipsByOwnerIdAsync(int ownerId)
+        {
+            var response = await _client.From<Ship>()
+                                        .Where(s => s.OwnerId == ownerId)
+                                        .Get();
+            return response.Models;
+        }
     }
 }

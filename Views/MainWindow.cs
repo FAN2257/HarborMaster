@@ -50,7 +50,7 @@ namespace HarborMaster.Views
         public DateTime SelectedETD => dtpETD.Value;
 
         // 'set' properti (Output ke UI)
-        public void SetScheduleDataSource(List<BerthAssignment> schedule)
+        public void SetScheduleDataSource(List<DashboardScheduleViewModel> schedule)
         {
             // Tampilkan di DataGridView
             dgvSchedule.DataSource = null;
@@ -59,43 +59,43 @@ namespace HarborMaster.Views
             // Konfigurasi kolom agar lebih informatif
             if (dgvSchedule.Columns.Count > 0)
             {
-                // Sembunyikan kolom ID yang tidak perlu
-                if (dgvSchedule.Columns["Id"] != null)
-                    dgvSchedule.Columns["Id"].Visible = false;
+                var columnsToShow = new Dictionary<string, (string Header, int Width)>
+                {
+                    { "ShipName", ("Ship Name", 250) },
+                    { "BerthName", ("Berth Name", 150) },
+                    { "Status", ("Status", 150) },
+                    { "ETA", ("ETA", 180) },
+                    { "ETD", ("ETD", 180) },
+                    { "ActualArrivalTime", ("Actual Arrival", 180) }
+                };
 
-                // Set header text yang lebih jelas
-                if (dgvSchedule.Columns["ShipId"] != null)
-                    dgvSchedule.Columns["ShipId"].HeaderText = "Ship ID";
-                if (dgvSchedule.Columns["BerthId"] != null)
-                    dgvSchedule.Columns["BerthId"].HeaderText = "Berth ID";
-                if (dgvSchedule.Columns["ETA"] != null)
+                // Sembunyikan semua kolom dulu
+                foreach (DataGridViewColumn col in dgvSchedule.Columns)
                 {
-                    dgvSchedule.Columns["ETA"].HeaderText = "ETA";
-                    dgvSchedule.Columns["ETA"].DefaultCellStyle.Format = "dd/MM/yyyy HH:mm";
+                    col.Visible = false;
                 }
-                if (dgvSchedule.Columns["ETD"] != null)
+
+                // Tampilkan dan konfigurasi kolom yang diinginkan
+                foreach (var colInfo in columnsToShow)
                 {
-                    dgvSchedule.Columns["ETD"].HeaderText = "ETD";
-                    dgvSchedule.Columns["ETD"].DefaultCellStyle.Format = "dd/MM/yyyy HH:mm";
-                }
-                if (dgvSchedule.Columns["Status"] != null)
-                    dgvSchedule.Columns["Status"].HeaderText = "Status";
-                if (dgvSchedule.Columns["ActualArrivalTime"] != null)
-                {
-                    dgvSchedule.Columns["ActualArrivalTime"].HeaderText = "Arrival Time";
-                    dgvSchedule.Columns["ActualArrivalTime"].DefaultCellStyle.Format = "dd/MM/yyyy HH:mm";
-                }
-                if (dgvSchedule.Columns["ActualDepartureTime"] != null)
-                {
-                    dgvSchedule.Columns["ActualDepartureTime"].HeaderText = "Departure Time";
-                    dgvSchedule.Columns["ActualDepartureTime"].DefaultCellStyle.Format = "dd/MM/yyyy HH:mm";
+                    if (dgvSchedule.Columns[colInfo.Key] != null)
+                    {
+                        var col = dgvSchedule.Columns[colInfo.Key];
+                        col.Visible = true;
+                        col.HeaderText = colInfo.Value.Header;
+                        col.Width = colInfo.Value.Width;
+                        if (colInfo.Key.Contains("ETA") || colInfo.Key.Contains("ETD") || colInfo.Key.Contains("Arrival"))
+                        {
+                            col.DefaultCellStyle.Format = "dd/MM/yyyy HH:mm";
+                        }
+                    }
                 }
             }
 
-            // Update kartu statistik
+            // Update kartu statistik berdasarkan ViewModel
             int totalScheduled = schedule.Count;
-            int docked = schedule.FindAll(s => s.Status == "Arrived" || s.Status == "Docked" || s.Status == "Berlabuh").Count;
-            int waiting = schedule.FindAll(s => s.Status == "Scheduled" || s.Status == "Menunggu").Count;
+            int docked = schedule.Count(s => s.Status == "Arrived" || s.Status == "Docked" || s.Status == "Berlabuh");
+            int waiting = schedule.Count(s => s.Status == "Scheduled" || s.Status == "Menunggu");
 
             lblCardTotalKapalValue.Text = totalScheduled.ToString();
             lblCardSedangBerlabuhValue.Text = docked.ToString();

@@ -11,7 +11,7 @@ namespace HarborMaster.Repositories
     {
         protected readonly Client _client = SupabaseManager.Client;
 
-        public async Task<List<T>> GetAllAsync()
+        public virtual async Task<List<T>> GetAllAsync()
         {
             var response = await _client.From<T>().Get();
             return response.Models; 

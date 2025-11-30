@@ -20,6 +20,9 @@ namespace HarborMaster.Models
         [Column("ship_id")]
         public int ShipId { get; set; }
 
+        [Reference(typeof(Ship))]
+        public Ship Ship { get; set; }
+
         /// <summary>
         /// The owner of the ship (user who submitted the request)
         /// </summary>
