@@ -28,6 +28,9 @@
     <Compile Update="Views\EditShipDialog.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Update="Views\ForgotPasswordWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Update="Views\HarborMasterStatisticsView.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -47,6 +50,9 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Update="Views\RegisterWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Views\ResetPasswordWindow.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Update="Views\SubmitDockingRequestView.cs">

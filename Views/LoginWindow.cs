@@ -89,6 +89,21 @@ namespace HarborMaster.Views
             regWindow.ShowViewAsDialog(); // Tampilkan sebagai dialog
         }
 
+        // 7. Event handler untuk link Lupa Password
+        private void lnkForgotPassword_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            // Buka Forgot Password dialog
+            ForgotPasswordWindow forgotWindow = new ForgotPasswordWindow();
+            DialogResult result = forgotWindow.ShowDialog();
+
+            if (result == DialogResult.OK)
+            {
+                // Jika berhasil, buka Reset Password dialog
+                ResetPasswordWindow resetWindow = new ResetPasswordWindow();
+                resetWindow.ShowDialog();
+            }
+        }
+
         // --- Window Control Handlers ---
         private void btnMinimize_Click(object sender, EventArgs e)
         {
