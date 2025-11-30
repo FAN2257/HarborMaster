@@ -41,13 +41,16 @@ namespace HarborMaster.Presenters
                 {
                     // Sukses - email telah dikirim
                     _view.SuccessMessage = "Kode reset password telah dikirim ke email Anda. Silakan cek inbox Anda.";
-                    
+
                     _notificationService.ShowMessage(
                         "Email Terkirim!\n\n" +
                         "Kode reset password telah dikirim ke email Anda.\n" +
                         "Silakan cek inbox (atau folder spam) Anda.\n\n" +
                         "Kode berlaku selama 30 menit."
                     );
+
+                    // Close window with success to trigger ResetPasswordWindow
+                    _view.CloseWithSuccess();
                 }
                 else
                 {

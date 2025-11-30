@@ -16,5 +16,6 @@ namespace HarborMaster.Views.Interfaces
 
         // Actions
         void CloseView();
+        void CloseWithSuccess();
     }
 }

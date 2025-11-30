@@ -243,6 +243,12 @@ namespace HarborMaster.Views
             this.Close();
         }
 
+        public void CloseWithSuccess()
+        {
+            this.DialogResult = System.Windows.Forms.DialogResult.OK;
+            this.Close();
+        }
+
         // Make title bar draggable
         private void panelTitleBar_MouseDown(object sender, MouseEventArgs e)
         {

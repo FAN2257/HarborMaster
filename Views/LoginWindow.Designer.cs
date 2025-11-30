@@ -80,14 +80,15 @@
             lblError.TabIndex = 7;
             // 
             // lnkForgotPassword
-            // 
+            //
             lnkForgotPassword.ActiveLinkColor = Color.FromArgb(211, 84, 0);
+            lnkForgotPassword.AutoSize = false;
             lnkForgotPassword.BackColor = Color.FromArgb(255, 243, 205);
             lnkForgotPassword.BorderStyle = BorderStyle.FixedSingle;
             lnkForgotPassword.Cursor = Cursors.Hand;
             lnkForgotPassword.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             lnkForgotPassword.LinkColor = Color.FromArgb(230, 126, 34);
-            lnkForgotPassword.Location = new Point(40, 259);
+            lnkForgotPassword.Location = new Point(40, 255);
             lnkForgotPassword.Name = "lnkForgotPassword";
             lnkForgotPassword.Size = new Size(270, 25);
             lnkForgotPassword.TabIndex = 4;
