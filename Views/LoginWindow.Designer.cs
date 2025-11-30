@@ -30,6 +30,7 @@
         {
             panelLogin = new RoundedPanel();
             lblError = new Label();
+            lnkForgotPassword = new LinkLabel();
             btnGoToRegister = new Button();
             btnLogin = new Button();
             txtPassword = new TextBox();
@@ -72,24 +73,28 @@
             lblError.AutoSize = true;
             lblError.Font = new Font("Segoe UI", 8F);
             lblError.ForeColor = Color.Red;
-            lblError.Location = new Point(40, 415);
+            lblError.Location = new Point(40, 400);
             lblError.MaximumSize = new Size(270, 0);
             lblError.Name = "lblError";
             lblError.Size = new Size(0, 19);
-            lblError.TabIndex = 8;
+            lblError.TabIndex = 7;
             // 
             // lnkForgotPassword
             // 
-            lnkForgotPassword = new LinkLabel();
-            lnkForgotPassword.AutoSize = true;
-            lnkForgotPassword.Font = new Font("Segoe UI", 9F);
-            lnkForgotPassword.LinkColor = Color.FromArgb(52, 152, 219);
-            lnkForgotPassword.Location = new Point(195, 250);
+            lnkForgotPassword.ActiveLinkColor = Color.FromArgb(211, 84, 0);
+            lnkForgotPassword.BackColor = Color.FromArgb(255, 243, 205);
+            lnkForgotPassword.BorderStyle = BorderStyle.FixedSingle;
+            lnkForgotPassword.Cursor = Cursors.Hand;
+            lnkForgotPassword.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            lnkForgotPassword.LinkColor = Color.FromArgb(230, 126, 34);
+            lnkForgotPassword.Location = new Point(40, 259);
             lnkForgotPassword.Name = "lnkForgotPassword";
-            lnkForgotPassword.Size = new Size(115, 20);
-            lnkForgotPassword.TabIndex = 9;
+            lnkForgotPassword.Size = new Size(270, 25);
+            lnkForgotPassword.TabIndex = 4;
             lnkForgotPassword.TabStop = true;
-            lnkForgotPassword.Text = "Lupa Password?";
+            lnkForgotPassword.Text = "🔐 Lupa Password? Klik di sini";
+            lnkForgotPassword.TextAlign = ContentAlignment.MiddleCenter;
+            lnkForgotPassword.VisitedLinkColor = Color.FromArgb(230, 126, 34);
             lnkForgotPassword.LinkClicked += lnkForgotPassword_LinkClicked;
             // 
             // btnGoToRegister
@@ -100,10 +105,10 @@
             btnGoToRegister.FlatStyle = FlatStyle.Flat;
             btnGoToRegister.Font = new Font("Segoe UI", 10F);
             btnGoToRegister.ForeColor = Color.White;
-            btnGoToRegister.Location = new Point(40, 365);
+            btnGoToRegister.Location = new Point(40, 357);
             btnGoToRegister.Name = "btnGoToRegister";
             btnGoToRegister.Size = new Size(270, 40);
-            btnGoToRegister.TabIndex = 7;
+            btnGoToRegister.TabIndex = 6;
             btnGoToRegister.Text = "Belum punya akun? Daftar disini";
             btnGoToRegister.UseVisualStyleBackColor = false;
             btnGoToRegister.Click += btnGoToRegister_Click;
@@ -116,10 +121,10 @@
             btnLogin.FlatStyle = FlatStyle.Flat;
             btnLogin.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
             btnLogin.ForeColor = Color.White;
-            btnLogin.Location = new Point(40, 295);
+            btnLogin.Location = new Point(40, 296);
             btnLogin.Name = "btnLogin";
             btnLogin.Size = new Size(270, 45);
-            btnLogin.TabIndex = 6;
+            btnLogin.TabIndex = 5;
             btnLogin.Text = "LOGIN";
             btnLogin.UseVisualStyleBackColor = false;
             btnLogin.Click += btnLogin_Click;
@@ -131,7 +136,7 @@
             txtPassword.Location = new Point(40, 215);
             txtPassword.Name = "txtPassword";
             txtPassword.Size = new Size(270, 32);
-            txtPassword.TabIndex = 5;
+            txtPassword.TabIndex = 2;
             txtPassword.UseSystemPasswordChar = true;
             // 
             // lblPass
@@ -152,7 +157,7 @@
             txtEmail.Location = new Point(40, 145);
             txtEmail.Name = "txtEmail";
             txtEmail.Size = new Size(270, 32);
-            txtEmail.TabIndex = 3;
+            txtEmail.TabIndex = 1;
             // 
             // lblEmail
             // 

@@ -9,13 +9,22 @@ namespace HarborMaster.Services
     {
         private readonly UserRepository _userRepository;
         private readonly PasswordResetTokenRepository _tokenRepository;
-        private readonly EmailService _emailService;
+        private readonly EmailNotificationService? _emailService;
 
         public AuthenticationService()
         {
             _userRepository = new UserRepository();
             _tokenRepository = new PasswordResetTokenRepository();
-            _emailService = new EmailService();
+
+            // Initialize email service (gracefully handle if not configured)
+            try
+            {
+                _emailService = new EmailNotificationService();
+            }
+            catch
+            {
+                _emailService = null; // Email service not configured
+            }
         }
 
         /// <summary>
@@ -166,9 +175,14 @@ namespace HarborMaster.Services
                 await _tokenRepository.InsertAsync(resetToken);
 
                 // 6. Kirim email dengan reset code
-                bool emailSent = await _emailService.SendPasswordResetEmail(
-                    user.Email, 
-                    user.FullName, 
+                if (_emailService == null)
+                {
+                    throw new Exception("Email service not configured. Please contact administrator.");
+                }
+
+                bool emailSent = await _emailService.SendPasswordResetCodeEmailAsync(
+                    user.Email,
+                    user.FullName,
                     resetCode
                 );
 

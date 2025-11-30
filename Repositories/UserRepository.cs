@@ -20,18 +20,23 @@ namespace HarborMaster.Repositories
         /// </summary>
         public async Task UpdateProfile(int userId, string fullName, string? email, string? phone, string? companyName)
         {
-            var updateData = new User
+            // Fetch current user data first
+            var currentUser = await GetByIdAsync(userId);
+            if (currentUser == null)
             {
-                Id = userId,
-                FullName = fullName,
-                Email = email,
-                Phone = phone,
-                CompanyName = companyName
-            };
+                throw new Exception("User not found");
+            }
 
+            // Update only the fields we want to change
+            currentUser.FullName = fullName;
+            currentUser.Email = email;
+            currentUser.Phone = phone;
+            currentUser.CompanyName = companyName;
+
+            // Update the user with complete data
             await _client.From<User>()
                         .Where(u => u.Id == userId)
-                        .Update(updateData);
+                        .Update(currentUser);
         }
 
         /// <summary>
@@ -39,15 +44,20 @@ namespace HarborMaster.Repositories
         /// </summary>
         public async Task ChangePassword(int userId, string newPasswordHash)
         {
-            var updateData = new User
+            // Fetch current user data first
+            var currentUser = await GetByIdAsync(userId);
+            if (currentUser == null)
             {
-                Id = userId,
-                PasswordHash = newPasswordHash // Plain text for development
-            };
+                throw new Exception("User not found");
+            }
 
+            // Update only the password field
+            currentUser.PasswordHash = newPasswordHash; // Plain text for development
+
+            // Update the user with complete data
             await _client.From<User>()
                         .Where(u => u.Id == userId)
-                        .Update(updateData);
+                        .Update(currentUser);
         }
     }
 }

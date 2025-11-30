@@ -33,6 +33,8 @@ namespace HarborMaster.Models
         public string? CompanyName { get; set; }
 
         // Computed property for UI display - extracts first name
+        // IMPORTANT: JsonIgnore prevents Supabase from trying to update this non-existent column
+        [JsonIgnore]
         public string FirstName => FullName?.Split(' ').FirstOrDefault() ?? "User";
 
         public bool CanOverrideAllocation()

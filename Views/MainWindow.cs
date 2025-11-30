@@ -1,5 +1,6 @@
 ﻿using HarborMaster.Models;
 using HarborMaster.Presenters;
+using HarborMaster.Services;
 using HarborMaster.Views.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -14,19 +15,30 @@ namespace HarborMaster.Views
         // 2. Pegang referensi ke Presenter dan User
         private readonly MainPresenter _presenter;
         private readonly User _currentUser;
+        private readonly WeatherService _weatherService;
+
+        // Weather widget controls
+        private Panel panelWeather;
+        private Label lblWeatherStatus;
+        private Label lblWeatherDetails;
+        private Button btnRefreshWeather;
 
         public MainWindow(User user)
         {
             InitializeComponent(); // ✅ SEKARANG TIDAK KOSONG - UI dibuat via Designer!
             _currentUser = user;
 
-            // 3. Buat instance Presenter
+            // 3. Buat instance Presenter dan Services
             _presenter = new MainPresenter(this);
+            _weatherService = new WeatherService();
 
-            // 4. Configure role-based UI visibility
+            // 4. Initialize weather widget
+            InitializeWeatherWidget();
+
+            // 5. Configure role-based UI visibility
             ConfigureRoleBasedUI();
 
-            // 5. Hubungkan event Form_Load untuk memuat data
+            // 6. Hubungkan event Form_Load untuk memuat data
             this.Load += MainWindow_Load;
         }
 
@@ -112,6 +124,9 @@ namespace HarborMaster.Views
         {
             // Panggil Presenter untuk memuat data awal
             await _presenter.LoadInitialDataAsync(_currentUser);
+
+            // Load weather data
+            await LoadWeatherDataAsync();
         }
 
         private void btnAddShip_Click(object sender, EventArgs e)
@@ -322,6 +337,132 @@ namespace HarborMaster.Views
         private void dgvSchedule_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
 
+        }
+
+        /// <summary>
+        /// Initialize weather widget UI
+        /// </summary>
+        private void InitializeWeatherWidget()
+        {
+            // Create weather panel (between statistics cards and datagrid)
+            panelWeather = new Panel
+            {
+                Location = new Point(30, 240),
+                Size = new Size(1340, 60),
+                BackColor = Color.FromArgb(41, 128, 185),
+                Visible = true
+            };
+
+            // Weather status label (emoji + description)
+            lblWeatherStatus = new Label
+            {
+                Location = new Point(20, 10),
+                Size = new Size(400, 25),
+                Font = new Font("Segoe UI", 11, FontStyle.Bold),
+                ForeColor = Color.White,
+                Text = "⏳ Loading weather..."
+            };
+
+            // Weather details label (temperature, wind, visibility)
+            lblWeatherDetails = new Label
+            {
+                Location = new Point(20, 35),
+                Size = new Size(1100, 20),
+                Font = new Font("Segoe UI", 9),
+                ForeColor = Color.FromArgb(236, 240, 241),
+                Text = ""
+            };
+
+            // Refresh weather button
+            btnRefreshWeather = new Button
+            {
+                Location = new Point(1220, 15),
+                Size = new Size(100, 30),
+                BackColor = Color.FromArgb(52, 152, 219),
+                ForeColor = Color.White,
+                FlatStyle = FlatStyle.Flat,
+                Font = new Font("Segoe UI", 9, FontStyle.Bold),
+                Text = "🔄 Refresh",
+                Cursor = Cursors.Hand
+            };
+            btnRefreshWeather.FlatAppearance.BorderSize = 0;
+            btnRefreshWeather.Click += async (s, e) => await LoadWeatherDataAsync();
+
+            // Add controls to weather panel
+            panelWeather.Controls.Add(lblWeatherStatus);
+            panelWeather.Controls.Add(lblWeatherDetails);
+            panelWeather.Controls.Add(btnRefreshWeather);
+
+            // Add weather panel to form
+            this.Controls.Add(panelWeather);
+            panelWeather.BringToFront();
+
+            // Move DataGridView down to make room for weather widget
+            dgvSchedule.Location = new Point(30, 310);
+            dgvSchedule.Size = new Size(1340, 350);
+        }
+
+        /// <summary>
+        /// Load weather data from API and update widget
+        /// </summary>
+        private async System.Threading.Tasks.Task LoadWeatherDataAsync()
+        {
+            try
+            {
+                lblWeatherStatus.Text = "⏳ Loading weather...";
+                lblWeatherDetails.Text = "";
+                btnRefreshWeather.Enabled = false;
+
+                // Fetch weather data
+                var weather = await _weatherService.GetHarborWeatherAsync();
+
+                if (weather == null)
+                {
+                    lblWeatherStatus.Text = "⚠️ Weather service unavailable";
+                    lblWeatherDetails.Text = "API key not configured or service error";
+                    panelWeather.BackColor = Color.FromArgb(149, 165, 166); // Gray
+                    return;
+                }
+
+                // Update weather status with emoji and description
+                lblWeatherStatus.Text = $"{weather.GetStatusEmoji()} {weather.Description.ToUpper()} at {ApiConfiguration.HarborLocation}";
+
+                // Update weather details
+                lblWeatherDetails.Text =
+                    $"Temperature: {weather.Temperature:F1}°C (feels like {weather.FeelsLike:F1}°C) | " +
+                    $"Wind: {weather.WindSpeedKnots:F1} knots ({weather.WindSpeed:F1} m/s) | " +
+                    $"Visibility: {weather.Visibility}m | " +
+                    $"Humidity: {weather.Humidity}% | " +
+                    $"Wave Height: ~{weather.EstimatedWaveHeight:F1}m";
+
+                // Change panel color based on safety
+                if (weather.IsSafeForDocking())
+                {
+                    panelWeather.BackColor = Color.FromArgb(39, 174, 96); // Green
+                }
+                else
+                {
+                    panelWeather.BackColor = Color.FromArgb(231, 76, 60); // Red
+                    lblWeatherStatus.Text += " - ⚠️ UNSAFE FOR DOCKING";
+                }
+            }
+            catch (Exception ex)
+            {
+                lblWeatherStatus.Text = "⚠️ Weather service error";
+                lblWeatherDetails.Text = $"Error: {ex.Message}";
+                panelWeather.BackColor = Color.FromArgb(149, 165, 166); // Gray
+
+                // Don't show error to user if API key not configured (expected in dev)
+                if (!ex.Message.Contains("API key not configured"))
+                {
+                    MessageBox.Show($"Weather service error: {ex.Message}", "Weather",
+                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                }
+            }
+            finally
+            {
+                btnRefreshWeather.Enabled = true;
+            }
         }
     }
 }
